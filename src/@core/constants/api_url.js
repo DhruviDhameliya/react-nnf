@@ -5,4 +5,7 @@ export const ApiRoutes = {
   CHECKMOBILE: "check-mobile",
   REGISTER: "register",
   GETATTRIBUTEBYID: "get-attributebyid",
+  INSERTVIDEO: "insert-video",
+  GETVIDEOS: "get-videos",
+  UPDATEVIDEO: "update-video",
 };
