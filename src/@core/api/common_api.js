@@ -46,3 +46,30 @@ export const getAttributeById = async (type) => {
     throw error;
   }
 };
+
+export const insertVideo = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.INSERTVIDEO, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateVideo = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.UPDATEVIDEO, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVideos = async () => {
+  try {
+    const res = await Request.get(ApiRoutes.GETVIDEOS);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
