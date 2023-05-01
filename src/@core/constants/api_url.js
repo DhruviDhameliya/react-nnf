@@ -8,4 +8,9 @@ export const ApiRoutes = {
   INSERTVIDEO: "insert-video",
   GETVIDEOS: "get-videos",
   UPDATEVIDEO: "update-video",
+  INSERTQUESTION: "insert-question",
+  UPDATEQUESTION: "update-question",
+  GETQUESTIONS: "get-questions",
+  GETOPTIONSBYID: "get-option",
+  DELETEOPTION: "delete-option",
 };

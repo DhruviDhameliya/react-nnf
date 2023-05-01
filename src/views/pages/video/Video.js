@@ -26,6 +26,7 @@ import {
 import { notification } from "../../../@core/constants/notification";
 import DataTable from "react-data-table-component";
 import { useEffect } from "react";
+import ReactPlayer from "react-player";
 
 const defaultValues = {
   v_name: "",
@@ -150,6 +151,9 @@ function Video() {
       },
     },
   ];
+  const details = navigator.userAgent;
+  const regExp = /android|iphone/i;
+  const isMobileDevice = regExp.test(details);
 
   return (
     <Fragment>
@@ -195,7 +199,9 @@ function Video() {
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle tag="h4">Add Video</CardTitle>
+            <CardTitle tag="h4">
+              {step == 1 ? "Add Video" : "Edit Video"}
+            </CardTitle>
           </CardHeader>
           <CardBody>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -255,9 +261,22 @@ function Video() {
                   <FormFeedback>{errors.v_link.message}</FormFeedback>
                 )}
               </div>
+              {console.log(isMobileDevice, "isMobileDevice")}
+              <div
+                className="d-flex mb-1"
+                style={{
+                  width: isMobileDevice ? "100%" : "35%",
+                }}
+              >
+                <ReactPlayer
+                  url={videoData?.v_link}
+                  controls
+                  height={videoData?.v_link != "" ? "250px" : "0px"}
+                />
+              </div>
               <div className="d-flex">
                 <Button className="me-1" color="primary" type="submit">
-                  Submit
+                  {step == 1 ? "Submit" : "Update"}
                 </Button>
                 <Button
                   outline
