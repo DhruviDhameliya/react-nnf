@@ -18,7 +18,7 @@ import {
   Briefcase,
   UserX,
   Filter,
-  Video
+  Video,
 } from "react-feather";
 import secureLocalStorage from "react-secure-storage";
 // let user = JSON.parse(localStorage.getItem("userData"));
@@ -214,17 +214,26 @@ const general_settings = {
     },
   ],
 };
-let View = [{
-  id: "dashboard",
-  title: "Dashboard",
-  icon: <Home size={20} />,
-  navLink: "/dashboard",
-},{
-  id: "videos",
-  title: "Videos",
-  icon: <Video size={20} />,
-  navLink: "/video",
-}];
+let View = [
+  {
+    id: "dashboard",
+    title: "Dashboard",
+    icon: <Home size={20} />,
+    navLink: "/dashboard",
+  },
+  {
+    id: "videos",
+    title: "Videos",
+    icon: <Video size={20} />,
+    navLink: "/video",
+  },
+  {
+    id: "questions",
+    title: "Questions",
+    icon: <List size={20} />,
+    navLink: "/questions",
+  },
+];
 // let g_View = [dashboard, Notes];
 // // user?.active_package_id == 5 ? g_View.push(leave) : null;
 // user?.p_lead == 1 ? g_View.push(lead) : null;

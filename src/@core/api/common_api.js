@@ -73,3 +73,48 @@ export const getVideos = async () => {
     throw error;
   }
 };
+
+export const insertQuestion = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.INSERTQUESTION, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateQuestion = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.UPDATEQUESTION, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getQuestions = async () => {
+  try {
+    const res = await Request.get(ApiRoutes.GETQUESTIONS);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getOptionsById = async (data) => {
+  try {
+    const res = await Request.get(ApiRoutes.GETOPTIONSBYID + "/" + data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteOption = async (id) => {
+  try {
+    const res = await Request.get(ApiRoutes.DELETEOPTION + "/" + id);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
