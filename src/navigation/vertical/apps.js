@@ -12,6 +12,7 @@ import {
   Users,
   Bell,
   Home,
+  HelpCircle,
   Feather,
   Settings,
   CheckCircle,
@@ -214,7 +215,8 @@ const general_settings = {
     },
   ],
 };
-let View = [
+let View = [];
+let adminRoutes = [
   {
     id: "dashboard",
     title: "Dashboard",
@@ -234,6 +236,22 @@ let View = [
     navLink: "/questions",
   },
 ];
+
+let userRoutes = [
+  {
+    id: "videoBasedTraining",
+    title: "Video Based Training",
+    icon: <HelpCircle size={20} />,
+    navLink: "/quiz",
+  },
+  {
+    id: "certificate",
+    title: "Certificate",
+    icon: <HelpCircle size={20} />,
+    navLink: "/certificate",
+  },
+];
+
 // let g_View = [dashboard, Notes];
 // // user?.active_package_id == 5 ? g_View.push(leave) : null;
 // user?.p_lead == 1 ? g_View.push(lead) : null;
@@ -355,6 +373,6 @@ let View = [
 //   },
 // ];
 
-// user?.type == 0 ? (View = s_a_View) : (View = g_View);
+user?.type == 0 ? (View = adminRoutes) : (View = userRoutes);
 
 export default View;

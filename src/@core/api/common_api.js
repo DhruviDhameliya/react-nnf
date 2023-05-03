@@ -118,3 +118,69 @@ export const deleteOption = async (id) => {
     throw error;
   }
 };
+
+export const updateVideoPercentage = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.UPDATEVIDEOPERCENTAGE, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVideosWithPercentage = async (u_id) => {
+  try {
+    const res = await Request.get(
+      ApiRoutes.GETVIDEOSWITHPERCENTAGE + "/" + u_id
+    );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const insertVideoPercentage = async (data) => {
+  try {
+    const res = await Request.get(ApiRoutes.INSERTVIDEOPERCENTAGE, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getQuestionsForQuiz = async (v_id) => {
+  try {
+    const res = await Request.get(ApiRoutes.GETQUESTIONSFORQUIZ + "/" + v_id);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getOptionsForQuizById = async (q_id) => {
+  try {
+    const res = await Request.get(ApiRoutes.GETOPTIONSFORQUIZBYID + "/" + q_id);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const insertQuiz = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.INSERTQUIZ, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getQuizResult = async (u_id, v_id, type) => {
+  try {
+    const res = await Request.get(
+      ApiRoutes.GETQUIZRESULT + "/" + u_id + "/" + v_id + "/" + type
+    );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
