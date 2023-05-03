@@ -96,7 +96,7 @@ export const getHomeRouteForLoggedInUser = (userRole) => {
   console.log("userRoleuserRole", userRole);
   console.log(DefaultRoute, "DefaultRoute", userRole === "admin");
   if (userRole === "admin") return DefaultRoute;
-  if (userRole === "client") return "/course";
+  if (userRole === "client") return "/quiz";
   return "/login";
 };
 

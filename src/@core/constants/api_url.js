@@ -13,4 +13,11 @@ export const ApiRoutes = {
   GETQUESTIONS: "get-questions",
   GETOPTIONSBYID: "get-option",
   DELETEOPTION: "delete-option",
+  UPDATEVIDEOPERCENTAGE: "update-videopercentage",
+  INSERTVIDEOPERCENTAGE: "insert-videopercentage",
+  GETVIDEOSWITHPERCENTAGE: "get-videoswithpercentage",
+  GETQUESTIONSFORQUIZ: "get-questionforquiz",
+  GETOPTIONSFORQUIZBYID: "get-optionforquiz",
+  INSERTQUIZ: "insert-quiz",
+  GETQUIZRESULT: "get-quizresult",
 };

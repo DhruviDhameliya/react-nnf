@@ -149,6 +149,7 @@ import PrivateRoute from "@components/routes/PrivateRoute";
 // ** Utils
 import { isObjEmpty } from "@utils";
 import AdminRoutes from "./adminRoutes";
+import UserRoutes from "./userRoutes";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -164,7 +165,7 @@ const DefaultRoute = "/dashboard";
 
 // ** Merge Routes
 // const Routes = [...AdminRoutes, ...TlsAdminRoute, ...AuthenticationRoutes];
-const Routes = [...AdminRoutes, ...AuthenticationRoutes];
+const Routes = [...AdminRoutes, ...AuthenticationRoutes,...UserRoutes];
 const getRouteMeta = (route) => {
   if (isObjEmpty(route.element.props)) {
     if (route.meta) {

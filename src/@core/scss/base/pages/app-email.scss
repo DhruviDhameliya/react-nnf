@@ -212,8 +212,8 @@ $email_details_header_height: 5rem;
   // Action area of email list section
   .app-action {
     padding: 0.9rem ($spacer + 0.5);
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     border-bottom: 1px solid $border-color;
     background-color: $white;
     .action-right {

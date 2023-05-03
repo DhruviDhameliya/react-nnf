@@ -43,6 +43,8 @@ function Video() {
     v_name: yup.string().required("Video Name is Required "),
   });
 
+  const [v_img, setV_img] = useState("");
+
   const {
     setValue,
     reset,
@@ -68,12 +70,19 @@ function Video() {
 
   const onSubmit = async (data) => {
     if (Object.keys(errors).length == 0) {
-      console.log("datttt", data);
+      console.log("datttt", data, videoData);
       let resp;
+      console.log("v_duration: v_duration,v_img: v_img,", videoData, v_img);
       if (step == 1) {
-        resp = await insertVideo(videoData);
+        resp = await insertVideo({
+          ...videoData,
+          v_img: v_img,
+        });
       } else {
-        resp = await updateVideo(videoData);
+        resp = await updateVideo({
+          ...videoData,
+          v_img: v_img,
+        });
       }
       console.log("resspp", resp);
       if (resp?.status == 1) {
@@ -109,6 +118,28 @@ function Video() {
         message: resp?.message,
       });
     }
+  };
+
+  const handleDuration = async (duration) => {
+    console.log("onDuration", duration);
+    setVideoData({ ...videoData, v_duration: duration });
+  };
+
+  const details = navigator.userAgent;
+  const regExp = /android|iphone/i;
+  const isMobileDevice = regExp.test(details);
+
+  const handlePlayerReady = async (player) => {
+    const videoUrl = player.getInternalPlayer().getVideoUrl();
+    const videoId = videoUrl.match(/v=([^&]+)/)[1];
+    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
+    console.log(thumbnailUrl, "thumbnailUrl");
+    // setVideoData({
+    //   ...videoData,
+    //   v_img: `https://img.youtube.com/vi/${videoId}/0.jpg`,
+    // });
+    setV_img(thumbnailUrl);
+    // v_img = thumbnailUrl; // setThumbnail(thumbnailUrl);
   };
 
   const column = [
@@ -151,9 +182,6 @@ function Video() {
       },
     },
   ];
-  const details = navigator.userAgent;
-  const regExp = /android|iphone/i;
-  const isMobileDevice = regExp.test(details);
 
   return (
     <Fragment>
@@ -271,7 +299,9 @@ function Video() {
                 <ReactPlayer
                   url={videoData?.v_link}
                   controls
+                  onReady={handlePlayerReady}
                   height={videoData?.v_link != "" ? "250px" : "0px"}
+                  onDuration={handleDuration}
                 />
               </div>
               <div className="d-flex">
