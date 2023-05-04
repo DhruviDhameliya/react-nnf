@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import secureLocalStorage from "react-secure-storage";
 import {
   Badge,
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -12,14 +13,17 @@ import {
 import { getQuizResult } from "../../../@core/api/common_api";
 import { notification } from "../../../@core/constants/notification";
 import { countPassingScore } from "../../../@core/components/common/Common";
+import { ArrowLeft } from "react-feather";
 
 const QuizResult = ({
   video,
   step,
+  currentVideo,
   handleChangeStep,
   preResult,
   postResult,
   handleQuizResult,
+  handleNext, 
 }) => {
   let user = JSON.parse(secureLocalStorage.getItem("userData"));
   // const [preResult, setPreResult] = useState({});
@@ -145,13 +149,13 @@ const QuizResult = ({
             <div className="d-flex align-content-center justify-content-between w-100 p-1">
               <Button
                 color="primary"
-                disabled={currentQuestion == 0}
+                // disabled={currentQuestion == 0}
                 onClick={() => handleChangeStep(3)}
               >
-                <ArrowLeft
+                {/* <ArrowLeft
                   size={14}
                   className="rotate-rtl align-middle me-sm-50 me-0"
-                />
+                /> */}
                 <div className="align-middle d-sm-inline-block d-none">
                   Replay
                 </div>
@@ -162,12 +166,12 @@ const QuizResult = ({
                   countPassingScore(postResult?.total_question, 70) >
                   postResult?.total_correct_ans
                 }
-                onClick={() => handleChangeStep(2)}
+                onClick={() =>{console.log("currentVideo",currentVideo);handleNext(currentVideo + 1)}}
               >
-                <ArrowRight
+                {/* <ArrowRight
                   size={14}
                   className="rotate-rtl align-middle ms-sm-50 ms-0"
-                />
+                /> */}
                 <div className="align-middle d-sm-inline-block d-none">
                   Next
                 </div>

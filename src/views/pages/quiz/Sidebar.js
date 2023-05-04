@@ -37,31 +37,32 @@ const Sidebar = (props) => {
     preResult,
     postResult,
     handleQuizResult,
+    handleNext,
     // changeVideo,
   } = props;
 
-  const changeVideo = async (v_data, index) => {
-    if (
-      index == 0 ||
-      (index != 0 &&
-        countPassingScore(videoList[index - 1]?.total_question, 70) <=
-          videoList[index - 1]?.total_correct_ans)
-    ) {
-      await handleChangeVideo(v_data);
-      let pre = await handleQuizResult(v_data?.v_id, 0);
-      let post = await handleQuizResult(v_data?.v_id, 1);
-      if (Object?.keys(pre)?.length != 0) {
-        console.log("ifffffffffff");
-        await handleChangeStep(3);
-      } else if (Object?.keys(post)?.length != 0) {
-        await handleChangeStep(5);
-      } else if (index == 0) {
-        await handleChangeStep(1);
-      } else {
-        handleChangeStep(2);
-      }
-    }
-  };
+  // const changeVideo = async (v_data, index) => {
+  //   if (
+  //     index == 0 ||
+  //     (index != 0 &&
+  //       countPassingScore(videoList[index - 1]?.total_question, 70) <=
+  //         videoList[index - 1]?.total_correct_ans)
+  //   ) {
+  //     await handleChangeVideo(index);
+  //     let pre = await handleQuizResult(v_data?.v_id, 0);
+  //     let post = await handleQuizResult(v_data?.v_id, 1);
+  //     if (Object?.keys(pre)?.length != 0) {
+  //       console.log("ifffffffffff");
+  //       await handleChangeStep(3);
+  //     } else if (Object?.keys(post)?.length != 0) {
+  //       await handleChangeStep(5);
+  //     } else if (index == 0) {
+  //       await handleChangeStep(1);
+  //     } else {
+  //       handleChangeStep(2);
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     console.log("#######################################");
@@ -80,7 +81,7 @@ const Sidebar = (props) => {
               <h5>Videos</h5>
             </div>
             <PerfectScrollbar
-              className="sidebar-menu-list"
+              className="sidebar-menu-list cursor-pointer"
               options={{ wheelPropagation: false }}
             >
               <ListGroup tag="div" className="list-group-messages">
@@ -91,7 +92,8 @@ const Sidebar = (props) => {
                         // tag={Link}
                         // to="/apps/email/sent"
                         onClick={() => {
-                          changeVideo(v_data, index);
+                          // changeVideo(v_data, index);
+                          handleNext(index);
                         }}
                         action
                         active={video?.v_id == v_data?.v_id}
