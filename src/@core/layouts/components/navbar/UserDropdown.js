@@ -13,6 +13,8 @@ import secureLocalStorage from "react-secure-storage";
 import { useDispatch } from "react-redux";
 import { handleLogout } from "@store/authentication";
 
+import userImage from "@src/assets/images/portrait/small/user.png";
+
 // ** Third Party Components
 import {
   User,
@@ -51,7 +53,7 @@ const UserDropdown = () => {
   }, []);
 
   //** Vars
-  const userAvatar = (userData && userData.avatar) || defaultAvatar;
+  // const userAvatar = (userData && userData.avatar) || defaultAvatar;
 
   return (
     <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
@@ -63,20 +65,18 @@ const UserDropdown = () => {
       >
         <div className="user-nav d-sm-flex d-none">
           <span className="user-name fw-bold">
-            {(userData && userData["username"]) || "John Doe"}
+            {userData && userData?.u_name}
           </span>
-          <span className="user-status">
-            {(userData && userData.role) || "Admin"}
-          </span>
+          {userData?.type == 0 && <span className="user-status">Admin</span>}
         </div>
-        <Avatar img={userAvatar} imgHeight="40" imgWidth="40" status="online" />
+        <Avatar img={userImage} imgHeight="40" imgWidth="40" status="online" />
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem tag={Link} to="/pages/profile">
           <User size={14} className="me-75" />
           <span className="align-middle">Profile</span>
         </DropdownItem>
-        <DropdownItem tag={Link} to="/apps/email">
+        {/* <DropdownItem tag={Link} to="/apps/email">
           <Mail size={14} className="me-75" />
           <span className="align-middle">Inbox</span>
         </DropdownItem>
@@ -100,7 +100,7 @@ const UserDropdown = () => {
         <DropdownItem tag={Link} to="/pages/faq">
           <HelpCircle size={14} className="me-75" />
           <span className="align-middle">FAQ</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem
           tag={Link}
           to="/login"

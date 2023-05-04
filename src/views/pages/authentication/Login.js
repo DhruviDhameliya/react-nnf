@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 // ** Custom Hooks
 import { useSkin } from "@hooks/useSkin";
 import useJwt from "@src/auth/jwt/useJwt";
-
+import themeConfig from "@configs/themeConfig";
 // ** Third Party Components
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -53,6 +53,8 @@ import {
 // ** Styles
 import "@styles/react/pages/page-authentication.scss";
 import { notification } from "../../../@core/constants/notification";
+import { useEffect } from "react";
+import secureLocalStorage from "react-secure-storage";
 
 const ToastContent = ({ t, name, role }) => {
   return (
@@ -100,6 +102,17 @@ const Login = () => {
   const illustration = skin === "dark" ? "login-v2-dark.svg" : "login-v2.svg",
     source = require(`@src/assets/images/pages/${illustration}`).default;
 
+  useEffect(() => {
+    let user = JSON.parse(secureLocalStorage.getItem("userData"));
+    if (user) {
+      if (user?.type == 0) {
+        window.location.href = `${getHomeRouteForLoggedInUser("admin")}`;
+      } else {
+        window.location.href = `${getHomeRouteForLoggedInUser("client")}`;
+      }
+    }
+  }, []);
+
   const onSubmit = async (data) => {
     if (Object.values(data).every((field) => field.length > 0)) {
       // useJwt
@@ -125,7 +138,7 @@ const Login = () => {
       console.log("data", data);
       setLoading(true);
       const response = await LoginRequest(data);
-      console.log(response,"response");
+      console.log(response, "response");
       if (response?.status === 1) {
         await handleLogin(response?.data);
         if (response?.data.type == 0) {
@@ -164,7 +177,10 @@ const Login = () => {
     <div className="auth-wrapper auth-cover">
       <Row className="auth-inner m-0">
         <Link className="brand-logo" to="/" onClick={(e) => e.preventDefault()}>
-          <svg viewBox="0 0 139 95" version="1.1" height="28">
+          {/* <span className="brand-logo"> */}
+          <img src={themeConfig.app.appLogoImage} width="110px" alt="logo" />
+          {/* </span> */}
+          {/* <svg viewBox="0 0 139 95" version="1.1" height="28">
             <defs>
               <linearGradient
                 x1="100%"
@@ -229,8 +245,8 @@ const Login = () => {
                 </g>
               </g>
             </g>
-          </svg>
-          <h2 className="brand-text text-primary ms-1">Vuexy</h2>
+          </svg> */}
+          {/* <h2 className="brand-text text-primary ms-1">Vuexy</h2> */}
         </Link>
         <Col className="d-none d-lg-flex align-items-center p-5" lg="8" sm="12">
           <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
@@ -243,12 +259,14 @@ const Login = () => {
           sm="12"
         >
           <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
-            <CardTitle tag="h2" className="fw-bold mb-1">
-              Welcome to Vuexy! 👋
+            <CardTitle
+              tag="h2"
+              className="fw-bold mb-1"
+              style={{ textAlign: "center" }}
+            >
+              Welcome to Kangaroo Mother Care Foundation Training
             </CardTitle>
-            <CardText className="mb-2">
-              Please sign-in to your account and start the adventure
-            </CardText>
+            <CardText className="mb-2">Please sign-in to your account</CardText>
             <Form
               className="auth-login-form mt-2"
               onSubmit={handleSubmit(onSubmit)}

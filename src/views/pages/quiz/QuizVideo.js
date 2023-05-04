@@ -57,8 +57,11 @@ const QuizVideo = (props) => {
     setSidebarOpen,
     video,
     videoList,
+    currentVideo,
     handleChangeVideo,
+    handleQuizResult,
     handleChangeStep,
+    handleNext,
   } = props;
 
   let user = JSON.parse(secureLocalStorage.getItem("userData"));
@@ -78,6 +81,30 @@ const QuizVideo = (props) => {
       player.msRequestFullscreen();
     }
   };
+
+  // const handleNext = async () => {
+  //   let index = currentVideo + 1;
+  //   if (
+  //     index == 0 ||
+  //     (index != 0 &&
+  //       countPassingScore(videoList[index - 1]?.total_question, 70) <=
+  //         videoList[index - 1]?.total_correct_ans)
+  //   ) {
+  //     await handleChangeVideo(index);
+  //     let pre = await handleQuizResult(videoList[index]?.v_id, 0);
+  //     let post = await handleQuizResult(videoList[index]?.v_id, 1);
+  //     if (Object?.keys(pre)?.length != 0) {
+  //       console.log("ifffffffffff");
+  //       await handleChangeStep(3);
+  //     } else if (Object?.keys(post)?.length != 0) {
+  //       await handleChangeStep(5);
+  //     } else if (index == 0) {
+  //       await handleChangeStep(1);
+  //     } else {
+  //       handleChangeStep(2);
+  //     }
+  //   }
+  // };
 
   const handleProgress = async (progress) => {
     console.log("progress: ", progress);
@@ -148,7 +175,7 @@ const QuizVideo = (props) => {
                 countPassingScore(video?.total_question, 70) >
                 video?.total_correct_ans
               }
-              onClick={() => handleChangeStep(2)}
+              onClick={() => handleNext(currentVideo + 1)}
             >
               <ArrowRight
                 size={14}
@@ -157,30 +184,33 @@ const QuizVideo = (props) => {
               <div className="align-middle d-sm-inline-block d-none">Next</div>
             </Button>
           ) : (
-            <Button
-              color="primary"
-              onClick={() => handleChangeStep(4)}
-              disabled={
-                video?.total_question == null &&
-                video?.total_correct_ans == null &&
-                watchedPercentage < 95
-              }
-            >
-              <ArrowRight
-                size={14}
-                className="rotate-rtl align-middle ms-sm-50 ms-0"
-              />
-              <div className="align-middle d-sm-inline-block d-none">
-                Start Quiz
-              </div>
-            </Button>
+            (console.log("videooo", video),
+            (
+              <Button
+                color="primary"
+                onClick={() => handleChangeStep(4)}
+                disabled={
+                  video?.total_question == null &&
+                  video?.total_correct_ans == null &&
+                  watchedPercentage < 95
+                }
+              >
+                <ArrowRight
+                  size={14}
+                  className="rotate-rtl align-middle ms-sm-50 ms-0"
+                />
+                <div className="align-middle d-sm-inline-block d-none">
+                  Start Quiz
+                </div>
+              </Button>
+            ))
           )}
 
           <button
             style={{
               padding: "6px 0px 6px 6px !important",
               cursor: "pointer",
-              backgroundColor: "#7367f0",
+              backgroundColor: "#1d124c",
               color: "white",
               border: "none",
               borderRadius: "4px",

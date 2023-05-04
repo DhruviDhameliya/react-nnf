@@ -11,6 +11,7 @@ import { ChevronLeft, ChevronRight } from "react-feather";
 import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
 import InputPasswordToggle from "@components/input-password-toggle";
 import { checkEmail, checkMobile } from "../../../../../@core/api/common_api";
+import { useNavigate } from "react-router-dom";
 
 // const personalInfoDefaultValue = {
 //   name: "",
@@ -31,6 +32,8 @@ const PersonalInfo = ({
   registerData,
   defaultValues,
 }) => {
+  const navigate = useNavigate();
+
   const SignupSchema = yup.object().shape({
     name: yup.string().required("Name is Required"),
     age: yup.string().required("Age is Required"),
@@ -578,13 +581,20 @@ const PersonalInfo = ({
           </Col> */}
         </Row>
         <div className="d-flex justify-content-between mt-2">
-          <Button color="secondary" className="btn-prev" outline disabled>
+          <Button
+            color="secondary"
+            className="btn-prev"
+            outline
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
             <ChevronLeft
               size={14}
               className="align-middle me-sm-25 me-0"
             ></ChevronLeft>
             <span className="align-middle d-sm-inline-block d-none">
-              Previous
+              Back to login
             </span>
           </Button>
           <Button type="submit" color="primary" className="btn-next">

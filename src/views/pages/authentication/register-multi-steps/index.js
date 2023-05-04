@@ -10,6 +10,7 @@ import { Row, Col } from "reactstrap";
 
 // ** Third Party Components
 import { Home, User, FileText } from "react-feather";
+import themeConfig from "@configs/themeConfig";
 
 // ** Steps
 import PersonalInfo from "./steps/PersonalInfo";
@@ -132,7 +133,12 @@ const RegisterMultiSteps = () => {
     <div className="auth-wrapper auth-cover">
       <Row className="auth-inner m-0">
         <Link className="brand-logo" to="/">
-          <svg viewBox="0 0 139 95" version="1.1" height="28">
+          <img
+            src={themeConfig.app.registrationLogoImage}
+            width="350px"
+            alt="logo"
+          />
+          {/* <svg viewBox="0 0 139 95" version="1.1" height="28">
             <defs>
               <linearGradient
                 x1="100%"
@@ -198,7 +204,7 @@ const RegisterMultiSteps = () => {
               </g>
             </g>
           </svg>
-          <h2 className="brand-text text-primary ms-1">Vuexy</h2>
+          <h2 className="brand-text text-primary ms-1">Vuexy</h2> */}
         </Link>
         <Col lg="3" className="d-none d-lg-flex align-items-center p-0">
           <div className="w-100 d-lg-flex align-items-center justify-content-center">

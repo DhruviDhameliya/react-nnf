@@ -6,7 +6,7 @@
 // step-5 : Quiz Result
 
 // ** React Imports
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 
 // ** Email App Component Imports
@@ -55,7 +55,8 @@ const QuizApp = () => {
   const [composeOpen, setComposeOpen] = useState(false);
   const [videoList, setVideoList] = useState([]);
   const [step, setStep] = useState(0);
-  const [video, setVideo] = useState(0);
+  const [currentVideo, setCurrentVideo] = useState(0);
+  // const [video, setVideo] = useState(0);
   const [preResult, setPreResult] = useState({});
   const [postResult, setPostResult] = useState({});
 
@@ -68,6 +69,7 @@ const QuizApp = () => {
 
   // ** Vars
   const params = useParams();
+  const navigate = useNavigate()
 
   useEffect(() => {
     getVideoList();
@@ -77,44 +79,41 @@ const QuizApp = () => {
     getVideoList();
   }, [preResult, postResult]);
 
-  const handleChangeVideo = (video) => {
-    setVideo(video);
+  const handleChangeVideo = (index) => {
+    setCurrentVideo(index);
+    // setVideo(videoList[index]);
+
     // handleQuizResult(video?.v_id, 0);
     // handleQuizResult(video?.v_id, 1);
   };
 
-  // const changeVideo = async (video, index) => {
-  //   if (
-  //     index == 0 ||
-  //     (index != 0 &&
-  //       countPassingScore(videoList[index - 1]?.total_question, 70) <=
-  //         videoList[index - 1]?.total_correct_ans)
-  //   ) {
-  //     if (index == 0 && video?.percentage == null) {
-  //       let resp = await updateVideoPercentage({
-  //         v_id: video.v_id,
-  //         percentage: 0,
-  //         u_id: user?.u_id,
-  //       });
-  //     }
-  //     console.log(preResult, "preResulfggggggggggggd");
-  //     await handleChangeVideo(video);
-  //     let pre = await handleQuizResult(video?.v_id, 0);
-  //     let post = await handleQuizResult(video?.v_id, 1);
-  //     console.log(preResult, pre, "preResultttttttttttttttttttttttt");
-  //     if (Object?.keys(pre)?.length != 0) {
-  //       console.log("ifffffffffff");
-  //       await handleChangeStep(3);
-  //     } else if (Object?.keys(post)?.length != 0) {
-  //       console.log("elseeeeeeeeeeeeeee");
-  //       await handleChangeStep(5);
-  //     } else if (index == 0) {
-  //       await handleChangeStep(1);
-  //     } else {
-  //       handleChangeStep(2);
-  //     }
-  //   }
-  // };
+  const handleNext = async (index) => {
+    console.log("|incedx", index);
+    if (index <= videoList?.length - 1) {
+      if (
+        index == 0 ||
+        (index != 0 &&
+          countPassingScore(videoList[index - 1]?.total_question, 70) <=
+            videoList[index - 1]?.total_correct_ans)
+      ) {
+        await handleChangeVideo(index);
+        let pre = await handleQuizResult(videoList[index]?.v_id, 0);
+        let post = await handleQuizResult(videoList[index]?.v_id, 1);
+        if (Object?.keys(pre)?.length != 0) {
+          console.log("ifffffffffff");
+          await handleChangeStep(3);
+        } else if (Object?.keys(post)?.length != 0) {
+          await handleChangeStep(5);
+        } else if (index == 0) {
+          await handleChangeStep(1);
+        } else {
+          handleChangeStep(2);
+        }
+      }
+    } else {
+      navigate("/certificate")
+    }
+  };
 
   const handleChangeStep = (step) => {
     setStep(step);
@@ -170,12 +169,13 @@ const QuizApp = () => {
           handleQuizResult={handleQuizResult}
           preResult={preResult}
           postResult={postResult}
+          handleNext={handleNext}
           // changeVideo={changeVideo}
         />
       ) : (
         <>
           <Sidebar
-            video={video}
+            video={videoList[currentVideo]}
             videoList={videoList}
             handleChangeVideo={handleChangeVideo}
             handleChangeStep={handleChangeStep}
@@ -190,6 +190,7 @@ const QuizApp = () => {
             setSidebarOpen={setSidebarOpen}
             preResult={preResult}
             postResult={postResult}
+            handleNext={handleNext}
             // resetSelectedMail={resetSelectedMail}
           />
           <div className="content-right">
@@ -209,13 +210,14 @@ const QuizApp = () => {
                     <Menu size="21" />
                   </div>
                   <div className="d-flex align-content-center justify-content-between w-100 p-1">
-                    <h5>{video?.v_name}</h5>
+                    <h5>{videoList[currentVideo]?.v_name}</h5>
                   </div>
                 </div>
                 {step == 1 && (
                   <Instruction
-                    video={video}
+                    video={videoList[currentVideo]}
                     videoList={videoList}
+                    currentVideo={currentVideo}
                     handleChangeVideo={handleChangeVideo}
                     handleChangeStep={handleChangeStep}
                     setSidebarOpen={setSidebarOpen}
@@ -224,8 +226,9 @@ const QuizApp = () => {
                 )}
                 {(step == 2 || step == 4) && (
                   <Quiz
-                    video={video}
+                    video={videoList[currentVideo]}
                     videoList={videoList}
+                    currentVideo={currentVideo}
                     handleChangeVideo={handleChangeVideo}
                     handleChangeStep={handleChangeStep}
                     setSidebarOpen={setSidebarOpen}
@@ -236,26 +239,30 @@ const QuizApp = () => {
                 )}
                 {step == 3 && (
                   <QuizVideo
-                    video={video}
+                    video={videoList[currentVideo]}
                     videoList={videoList}
+                    currentVideo={currentVideo}
                     handleChangeVideo={handleChangeVideo}
                     handleChangeStep={handleChangeStep}
                     setSidebarOpen={setSidebarOpen}
                     handleQuizResult={handleQuizResult}
+                    handleNext={handleNext}
+
                     // changeVideo={changeVideo}
                   />
                 )}
                 {step == 5 && (
                   <QuizResult
-                    video={video}
+                    video={videoList[currentVideo]}
                     videoList={videoList}
+                    currentVideo={currentVideo}
                     handleChangeVideo={handleChangeVideo}
                     handleChangeStep={handleChangeStep}
                     setSidebarOpen={setSidebarOpen}
                     handleQuizResult={handleQuizResult}
                     preResult={preResult}
                     postResult={postResult}
-                    // changeVideo={changeVideo}
+                    handleNext={handleNext}
                   />
                 )}
               </div>

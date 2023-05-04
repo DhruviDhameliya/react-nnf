@@ -17,7 +17,6 @@ const Instruction = (props) => {
     setSidebarOpen,
     video,
     videoList,
-    handleChangeVideo,
     handleChangeStep,
   } = props;
 

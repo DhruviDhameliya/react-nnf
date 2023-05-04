@@ -18,7 +18,14 @@ import {
   format,
 } from "../../../@core/components/common/Common";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { CheckCircle, Lock, PlayCircle, Unlock } from "react-feather";
+import {
+  CheckCircle,
+  FileText,
+  Lock,
+  Percent,
+  PlayCircle,
+  Unlock,
+} from "react-feather";
 import secureLocalStorage from "react-secure-storage";
 import { updateVideoPercentage } from "../../../@core/api/common_api";
 
@@ -62,7 +69,7 @@ function Videos({
         });
       }
       console.log(preResult, "preResulfggggggggggggd");
-      await handleChangeVideo(video);
+      await handleChangeVideo(index);
       let pre = await handleQuizResult(video?.v_id, 0);
       let post = await handleQuizResult(video?.v_id, 1);
       console.log(preResult, pre, "preResultttttttttttttttttttttttt");
@@ -82,13 +89,13 @@ function Videos({
 
   return (
     <Fragment>
-      <div className="email-app-list">
+      <div className="email-app-list cursor-pointer">
         <PerfectScrollbar className="" options={{ wheelPropagation: false }}>
           <Row>
             {videoList &&
               videoList?.map((video, index) => {
                 return (
-                  <Col md="6" lg="4">
+                  <Col md="6" lg="3">
                     <Card
                       onClick={async () => {
                         await changeVideo(video, index);
@@ -110,29 +117,43 @@ function Videos({
                       <CardBody>
                         <CardTitle tag="h4">{video?.v_name}</CardTitle>
                         <CardText>
-                          {video?.total_question &&
-                          video?.total_correct_ans &&
-                          countPassingScore(video?.total_question, 70) <=
-                            video?.total_correct_ans ? (
-                            <CheckCircle
-                              size={20}
-                              className="me-75"
-                              color="green"
-                            />
-                          ) : countPassingScore(video?.total_question, 70) >
-                            video?.total_correct_ans ? (
-                            <PlayCircle size={20} className="me-75" />
-                          ) : index == 0 ||
-                            (index != 0 &&
-                              countPassingScore(
-                                videoList[index - 1]?.total_question,
-                                70
-                              ) <= videoList[index - 1]?.total_correct_ans) ? (
-                            <Unlock size={20} className="me-75" />
-                          ) : (
-                            <Lock size={20} className="me-75" />
-                          )}
-                          Duration : {format(video?.v_duration)}
+                          <div>
+                            {video?.total_question &&
+                            video?.total_correct_ans &&
+                            countPassingScore(video?.total_question, 70) <=
+                              video?.total_correct_ans ? (
+                              <CheckCircle
+                                size={20}
+                                className="me-75"
+                                color="green"
+                              />
+                            ) : countPassingScore(video?.total_question, 70) >
+                              video?.total_correct_ans ? (
+                              <PlayCircle size={20} className="me-75" />
+                            ) : index == 0 ||
+                              (index != 0 &&
+                                countPassingScore(
+                                  videoList[index - 1]?.total_question,
+                                  70
+                                ) <=
+                                  videoList[index - 1]?.total_correct_ans) ? (
+                              <Unlock size={20} className="me-75" />
+                            ) : (
+                              <Lock size={20} className="me-75" />
+                            )}
+                            Duration : {format(video?.v_duration)}
+                          </div>
+                          <div className="mt-2">
+                            {video?.total_correct_ans && video?.total_question && (
+                              <>
+                                <FileText size={18} className="me-75" />
+                                Score :{" "}
+                                {video?.total_correct_ans +
+                                  " / " +
+                                  video?.total_question}
+                              </>
+                            )}
+                          </div>
                         </CardText>
                       </CardBody>
                     </Card>
