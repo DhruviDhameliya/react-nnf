@@ -34,6 +34,7 @@ import InputPasswordToggle from "@components/input-password-toggle";
 import { getHomeRouteForLoggedInUser, isObjEmpty, handleLogin } from "@utils";
 
 import { LoginRequest } from "../../../@core/api/auth";
+import "./login.css";
 
 // ** Reactstrap Imports
 import {
@@ -101,6 +102,7 @@ const Login = () => {
   } = useForm({ defaultValues });
   const illustration = skin === "dark" ? "login-v2-dark.svg" : "login-v2.svg",
     source = require(`@src/assets/images/pages/${illustration}`).default;
+  let loginImage = require(`@src/assets/images/logo/login.png`).default;
 
   useEffect(() => {
     let user = JSON.parse(secureLocalStorage.getItem("userData"));
@@ -172,13 +174,15 @@ const Login = () => {
       }
     }
   };
+  const logo = require("@src/assets/images/logo/logo1.jpeg").default;
 
   return (
-    <div className="auth-wrapper auth-cover">
+    <div className="auth-wrapper auth-cover ">
       <Row className="auth-inner m-0">
         <Link className="brand-logo" to="/" onClick={(e) => e.preventDefault()}>
           {/* <span className="brand-logo"> */}
-          <img src={themeConfig.app.appLogoImage} width="110px" alt="logo" />
+          {/* <img src={loginImage} alt="Login Cover" style={{ width: "50%" }} /> */}
+          {/* <img src={themeConfig.app.appLogoImage} width="110px" alt="logo" /> */}
           {/* </span> */}
           {/* <svg viewBox="0 0 139 95" version="1.1" height="28">
             <defs>
@@ -248,25 +252,39 @@ const Login = () => {
           </svg> */}
           {/* <h2 className="brand-text text-primary ms-1">Vuexy</h2> */}
         </Link>
-        <Col className="d-none d-lg-flex align-items-center p-5" lg="8" sm="12">
-          <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
-            <img className="img-fluid" src={source} alt="Login Cover" />
-          </div>
+        <Col
+          className="d-none d-lg-flex align-items-center justify-content-center flex-direction-column"
+          lg="8"
+          sm="12"
+          style={{ flexDirection: "column" }}
+        >
+          {/* <div align="center d-lg-flex align-items-center justify-content-center"> */}
+          <img
+            src={loginImage}
+            alt="Login Cover"
+            style={{ width: "60%", height: "auto" }}
+          />
+          {/* </div> */}
         </Col>
         <Col
           className="d-flex align-items-center auth-bg px-2 p-lg-5"
           lg="4"
           sm="12"
+          style={{ height: "93vh" }}
         >
           <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
+            <div className="d-flex justify-content-center mb-2 ">
+              <img src={logo} width="130px" alt="logo" />
+            </div>
+
             <CardTitle
               tag="h2"
               className="fw-bold mb-1"
               style={{ textAlign: "center" }}
             >
-              Welcome to Kangaroo Mother Care Foundation Training
+              Welcome to Online Kangaroo Mother Care Self Learning Module
             </CardTitle>
-            <CardText className="mb-2">Please sign-in to your account</CardText>
+            {/* <CardText className="mb-2">Please sign-in to your account</CardText> */}
             <Form
               className="auth-login-form mt-2"
               onSubmit={handleSubmit(onSubmit)}
@@ -285,7 +303,7 @@ const Login = () => {
                       id="u_email"
                       name="u_email"
                       type=""
-                      placeholder=""
+                      placeholder="Enter Mobile Number or Email"
                       invalid={errors.u_email && true}
                       {...field}
                       // onChange={(e) => {
@@ -337,7 +355,7 @@ const Login = () => {
               </Button>
             </Form>
             <p className="text-center mt-2">
-              <span className="me-25">New on our platform?</span>
+              <span className="me-25">Don't have an account? </span>
               <Link to="/register">
                 <span>Create an account</span>
               </Link>
@@ -361,6 +379,19 @@ const Login = () => {
             </div> */}
           </Col>
         </Col>
+        <div
+          className="w-100 d-lg-flex align-items-end justify-content-end mb-0"
+          style={{ overflow: "hidden" }}
+        >
+          <div className="bar">
+            <span className="bar_content">
+              કાંગારૂ મઘર કેર ફાઉન્ડેશન ઓફ ઈન્ડિયા પ્રેરિત અને એન. એન. એફ.
+              ગુજરાત અને યુનિસેફના સહયોગથી આયોજિત કાંગારૂ માતા સંભાળ તાલીમ
+              કાયૅક્રમ
+            </span>
+          </div>
+          {/* <img className="img-fluid" src={source} alt="Login Cover" /> */}
+        </div>
       </Row>
     </div>
   );

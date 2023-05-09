@@ -20,6 +20,9 @@ import {
   UserX,
   Filter,
   Video,
+  Youtube,
+  Award,
+  Folder,
 } from "react-feather";
 import secureLocalStorage from "react-secure-storage";
 // let user = JSON.parse(localStorage.getItem("userData"));
@@ -223,6 +226,12 @@ let adminRoutes = [
     icon: <Home size={20} />,
     navLink: "/dashboard",
   },
+  // {
+  //   id: "course",
+  //   title: "Course",
+  //   icon: <Folder size={20} />,
+  //   navLink: "/course",
+  // },
   {
     id: "videos",
     title: "Videos",
@@ -235,19 +244,25 @@ let adminRoutes = [
     icon: <List size={20} />,
     navLink: "/questions",
   },
+  {
+    id: "users",
+    title: "Users",
+    icon: <Users size={20} />,
+    navLink: "/users",
+  },
 ];
 
 let userRoutes = [
   {
     id: "videoBasedTraining",
     title: "Video Based Training",
-    icon: <HelpCircle size={20} />,
+    icon: <Youtube size={20} />,
     navLink: "/quiz",
   },
   {
     id: "certificate",
     title: "Certificate",
-    icon: <HelpCircle size={20} />,
+    icon: <Award size={20} />,
     navLink: "/certificate",
   },
 ];

@@ -1,39 +1,20 @@
-// ** React Imports
+import React from "react";
 import { Fragment } from "react";
-
-// ** Third Party Components
+import { ChevronRight } from "react-feather";
+import { Form, Row, Col, Label, Button, Input, FormFeedback } from "reactstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
-import { ChevronLeft, ChevronRight } from "react-feather";
+import { useEffect } from "react";
+import { updateProfile } from "../../../@core/api/common_api";
+import secureLocalStorage from "react-secure-storage";
+import { notification } from "../../../@core/constants/notification";
 
-// ** Reactstrap Imports
-import { Form, Label, Input, Row, Col, Button, FormFeedback } from "reactstrap";
-import InputPasswordToggle from "@components/input-password-toggle";
-import { checkEmail, checkMobile } from "../../../../../@core/api/common_api";
-import { useNavigate } from "react-router-dom";
-
-// const personalInfoDefaultValue = {
-//   name: "",
-//   age: "",
-//   address: "",
-//   no_of_children: "",
-//   city: "",
-//   pincode: "",
-//   u_email: "",
-//   mobile: "",
-//   password: "",
-//   confirmPassword: "",
-// };
-
-const PersonalInfo = ({
-  stepper,
-  onHandleChange,
-  registerData,
-  defaultValues,
-}) => {
-  const navigate = useNavigate();
-
+const PersonalUpdate = (props) => {
+  const {
+    onHandleChange,
+    registerData,
+  } = props;
   const SignupSchema = yup.object().shape({
     name: yup.string().required("Name is Required"),
     age: yup.string().required("Age is Required"),
@@ -41,11 +22,6 @@ const PersonalInfo = ({
       .string()
       .email("Please enter valid Email")
       .required("Email is Required"),
-    password: yup.string().required("Password is Required"),
-    confirmPassword: yup
-      .string()
-      .required("Confirm Password is Required")
-      .oneOf([yup.ref(`password`), null], "Passwords must match"),
     address: yup.string().required("Address is Required"),
     no_of_children: yup.string().required("Number of Children is Required"),
     city: yup.string().required("City is Required"),
@@ -62,6 +38,7 @@ const PersonalInfo = ({
   });
 
   const {
+    setValue,
     control,
     setError,
     handleSubmit,
@@ -69,61 +46,41 @@ const PersonalInfo = ({
     clearErrors,
     formState: { errors },
   } = useForm({
-    defaultValues,
+    mode: "onChange",
+    registerData,
     resolver: yupResolver(SignupSchema),
   });
 
-  const checkMail = async (mail) => {
-    let resp = await checkEmail({ u_email: mail });
-    console.log("resp", resp);
-    if (resp?.status === 1) {
-      clearErrors("u_email");
-    } else {
-      setError("u_email", {
-        type: "custom",
-        message: resp?.message,
-      });
-    }
-  };
-
-  const checkMobileNumber = async (mail) => {
-    let resp = await checkMobile({ mobile: mail });
-    console.log("resp", resp);
-    if (resp?.status === 1) {
-      clearErrors("mobile");
-    } else {
-      setError("mobile", {
-        type: "custom",
-        message: resp?.message,
-      });
-    }
-  };
+  useEffect(() => {
+    Object?.keys(registerData)?.forEach((field) => {
+      console.log("field", field, registerData[field]);
+      setValue(field, registerData[field]);
+    });
+  }, []);
 
   const onSubmit = async (data) => {
     console.log("data", data);
     console.log("errorsssssssssssss", errors);
-    await checkMail(data?.u_email);
-    await checkMobileNumber(data?.mobile);
+    // await checkMail(data?.u_email);
+    // await checkMobileNumber(data?.mobile);
     // if (Object.values(data).every((field) => field.length > 0)) {
     if (Object.keys(errors).length == 0) {
-      stepper?.next();
-      // } else {
-      //   for (const key in data) {
-      //     console.log(
-      //       "data[key]",
-      //       data[key],
-      //       typeof data[key],
-      //       typeof data[key] == "undefined",
-      //       data[key]?.length === 0,
-      //       typeof data[key] == "undefined" || data[key]?.length === 0
-      //     );
-      //     if (typeof data[key] == "undefined" || data[key]?.length === 0) {
-      //       setError(key, {
-      //         type: "manual",
-      //         message: `Please enter a valid ${key}`,
-      //       });
-      //     }
-      //   }
+      let resp = await updateProfile(registerData);
+      console.log("resspp", resp);
+      if (resp?.status == 1) {
+        notification({
+          type: "success",
+          position: "top-right",
+          message: resp?.message,
+        });
+        secureLocalStorage.setItem("userData", JSON.stringify(registerData));
+      } else {
+        notification({
+          type: "error",
+          position: "top-right",
+          message: resp?.message,
+        });
+      }
     }
   };
 
@@ -135,6 +92,7 @@ const PersonalInfo = ({
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
+          {/* {console.log("registerData", registerData)} */}
           <Col md="6" className="mb-1">
             <Label className="form-label" for="name">
               Name
@@ -211,6 +169,7 @@ const PersonalInfo = ({
                       id="male"
                       value="0"
                       name="gender"
+                      checked={registerData?.gender == 0}
                       onChange={(e) => {
                         console.log("e.target.value", e.target?.value);
                         field.onChange(e.target?.value);
@@ -229,6 +188,7 @@ const PersonalInfo = ({
                       type="radio"
                       invalid={errors?.gender && true}
                       {...field}
+                      checked={registerData?.gender == 1}
                       id="female"
                       value="1"
                       name="gender"
@@ -272,6 +232,7 @@ const PersonalInfo = ({
                       {...field}
                       id="married"
                       value="1"
+                      checked={registerData?.marital_status == 1}
                       onChange={(e) => {
                         field.onChange(e.target?.value);
                         onHandleChange(e.target?.value, e.target?.name);
@@ -290,6 +251,7 @@ const PersonalInfo = ({
                       name="marital_status"
                       invalid={errors?.marital_status && true}
                       {...field}
+                      checked={registerData?.marital_status == 0}
                       id="unmarried"
                       value="0"
                       onChange={(e) => {
@@ -443,6 +405,7 @@ const PersonalInfo = ({
               control={control}
               render={({ field }) => (
                 <Input
+                  disabled
                   id="mobile"
                   name="mobile"
                   type="number"
@@ -469,9 +432,9 @@ const PersonalInfo = ({
                 />
               )}
             />
-            {errors?.mobile && (
+            {/* {errors?.mobile && (
               <FormFeedback>{errors?.mobile?.message}</FormFeedback>
-            )}
+            )} */}
           </Col>
 
           <Col md="6" className="mb-1">
@@ -484,6 +447,7 @@ const PersonalInfo = ({
               control={control}
               render={({ field }) => (
                 <Input
+                  disabled
                   id="u_email"
                   name="u_email"
                   type="u_email"
@@ -502,107 +466,14 @@ const PersonalInfo = ({
                 />
               )}
             />
-            {errors?.u_email && (
+            {/* {errors?.u_email && (
               <FormFeedback>{errors?.u_email?.message}</FormFeedback>
-            )}
+            )} */}
           </Col>
-
-          <Col md="6" className="mb-1">
-            {/* <div className="form-password-toggle col-md-6 mb-1"> */}
-            <Controller
-              id="password"
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <InputPasswordToggle
-                  id="password"
-                  name="password"
-                  label="Password"
-                  htmlFor="password"
-                  className="input-group-merge"
-                  invalid={errors?.password && true}
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(e.target?.value);
-                    onHandleChange(e.target?.value, e.target?.name);
-                  }}
-                />
-              )}
-            />
-            {errors?.password && (
-              <FormFeedback>{errors?.password?.message}</FormFeedback>
-            )}
-            {/* </div> */}
-          </Col>
-          <Col md="6" className="mb-1">
-            {/* <div className="form-password-toggle col-md-6 mb-1"> */}
-            <Controller
-              control={control}
-              id="confirmPassword"
-              name="confirmPassword"
-              render={({ field }) => (
-                <InputPasswordToggle
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  htmlFor="confirmPassword"
-                  className="input-group-merge"
-                  invalid={errors?.confirmPassword && true}
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(e.target?.value);
-                    onHandleChange(e.target?.value, e.target?.name);
-                  }}
-                />
-              )}
-            />
-            {errors?.confirmPassword && (
-              <FormFeedback>{errors?.confirmPassword?.message}</FormFeedback>
-            )}
-            {/* </div> */}
-          </Col>
-
-          {/* <Col md="6" className="mb-1">
-            <Label className="form-label" for="town-city">
-              Town/City
-            </Label>
-            <Input id="town-city" name="town-city" placeholder="Town/City" />
-          </Col>
-          <Col md="6" className="mb-1">
-            <Label className="form-label" for="country">
-              Country
-            </Label>
-            <Input
-              type="number"
-              id="country"
-              name="country"
-              placeholder="United Kingdom"
-            />
-          </Col> */}
         </Row>
         <div className="d-flex justify-content-between mt-2">
-          <Button
-            color="secondary"
-            className="btn-prev"
-            outline
-            onClick={() => {
-              navigate("/login");
-            }}
-          >
-            <ChevronLeft
-              size={14}
-              className="align-middle me-sm-25 me-0"
-            ></ChevronLeft>
-            <span className="align-middle d-sm-inline-block d-none">
-              Back to login
-            </span>
-          </Button>
           <Button type="submit" color="primary" className="btn-next">
-            <span className="align-middle d-sm-inline-block d-none">Next</span>
-            <ChevronRight
-              size={14}
-              className="align-middle ms-sm-25 ms-0"
-            ></ChevronRight>
+            Submit
           </Button>
         </div>
       </Form>
@@ -610,4 +481,4 @@ const PersonalInfo = ({
   );
 };
 
-export default PersonalInfo;
+export default PersonalUpdate;

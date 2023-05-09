@@ -89,9 +89,9 @@ function Videos({
 
   return (
     <Fragment>
-      <div className="email-app-list cursor-pointer">
+      <div className="email-app-list cursor-pointer w-100">
         <PerfectScrollbar className="" options={{ wheelPropagation: false }}>
-          <Row>
+          <Row >
             {videoList &&
               videoList?.map((video, index) => {
                 return (

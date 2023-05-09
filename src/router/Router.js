@@ -139,7 +139,7 @@ const Router = () => {
       } else {
         userrole = "client";
       }
-      console.log("userrole", userrole);
+      // console.log("userrole", userrole);
 
       return getHomeRouteForLoggedInUser(userrole);
     } else {

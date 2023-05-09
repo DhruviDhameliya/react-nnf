@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "reactstrap";
-import { getQuizResult } from "../../../@core/api/common_api";
+import { getQuizResult, updateCertificateStatus } from "../../../@core/api/common_api";
 import { notification } from "../../../@core/constants/notification";
 import { countPassingScore } from "../../../@core/components/common/Common";
 import { ArrowLeft } from "react-feather";
@@ -18,12 +18,13 @@ import { ArrowLeft } from "react-feather";
 const QuizResult = ({
   video,
   step,
+  videoList,
   currentVideo,
   handleChangeStep,
   preResult,
   postResult,
   handleQuizResult,
-  handleNext, 
+  handleNext,
 }) => {
   let user = JSON.parse(secureLocalStorage.getItem("userData"));
   // const [preResult, setPreResult] = useState({});
@@ -33,9 +34,45 @@ const QuizResult = ({
     // const newFunction = async () => {
     handleQuizResult(video?.v_id, 0);
     handleQuizResult(video?.v_id, 1);
+
+    console.log(
+      "|videoList?.length - 1 === currentVideo",
+      videoList?.length,
+      currentVideo
+    );
+    if (videoList?.length - 1 === currentVideo) {
+      console.log("₹₹₹₹₹₹₹₹₹₹₹₹", postResult);
+      if (
+        countPassingScore(postResult?.total_question, 70) <=
+        postResult?.total_correct_ans
+      ) {
+        console.log("₹₹₹₹₹₹₹₹₹₹₹₹############");
+      }
+    }
+
     // };
     // newFunction();
   }, []);
+
+  useEffect(() => {
+    console.log(
+      "|videoList?.length - 1 === currentVideo",
+      videoList?.length,
+      currentVideo
+    );
+    if (videoList?.length - 1 === currentVideo) {
+      console.log("₹₹₹₹₹₹₹₹₹₹₹₹", postResult);
+      if (
+        countPassingScore(postResult?.total_question, 70) <=
+        postResult?.total_correct_ans
+      ) {
+        updateCertificateStatus(user?.u_id);
+        console.log("₹₹₹₹₹₹₹₹₹₹₹₹############");
+      }
+    }
+  }, [postResult]);
+
+  console.log("%%%%%%%%%%%", postResult);
 
   // const handleQuizResult = async (type) => {
   //   let resp = await getQuizResult(user?.u_id, video?.v_id, type);
@@ -166,7 +203,10 @@ const QuizResult = ({
                   countPassingScore(postResult?.total_question, 70) >
                   postResult?.total_correct_ans
                 }
-                onClick={() =>{console.log("currentVideo",currentVideo);handleNext(currentVideo + 1)}}
+                onClick={() => {
+                  console.log("currentVideo", currentVideo);
+                  handleNext(currentVideo + 1);
+                }}
               >
                 {/* <ArrowRight
                   size={14}

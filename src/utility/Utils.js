@@ -93,8 +93,8 @@ export const getUserData = () =>
  * @param {String} userRole Role of user
  */
 export const getHomeRouteForLoggedInUser = (userRole) => {
-  console.log("userRoleuserRole", userRole);
-  console.log(DefaultRoute, "DefaultRoute", userRole === "admin");
+  // console.log("userRoleuserRole", userRole);
+  // console.log(DefaultRoute, "DefaultRoute", userRole === "admin");
   if (userRole === "admin") return DefaultRoute;
   if (userRole === "client") return "/quiz";
   return "/login";

@@ -65,6 +65,17 @@ export const updateVideo = async (data) => {
   }
 };
 
+export const getAllUsers = async (page, perPage) => {
+  try {
+    const res = await Request.get(
+      ApiRoutes.GETALLUSERS + "/" + page + "/" + perPage
+    );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getVideos = async () => {
   try {
     const res = await Request.get(ApiRoutes.GETVIDEOS);
@@ -179,6 +190,98 @@ export const getQuizResult = async (u_id, v_id, type) => {
     const res = await Request.get(
       ApiRoutes.GETQUIZRESULT + "/" + u_id + "/" + v_id + "/" + type
     );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateProfile = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.UPDATEPROFILE, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updatePassword = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.UPDATEPASSWORD, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const insertCourse = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.INSERTCOURSE, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateCourse = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.UPDATECOURSE, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCourses = async () => {
+  try {
+    const res = await Request.get(ApiRoutes.GETCOURSES);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVideosByCourse = async (c_id) => {
+  try {
+    const res = await Request.get(ApiRoutes.GETVIDEOSBYCOURSE + "/" + c_id);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getQuizReport = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.GETQUIZREPORT, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getExcelQuizReport = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.GETEXCELQUIZREPORT, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateCertificateStatus = async (u_id) => {
+  try {
+    const res = await Request.get(
+      ApiRoutes.UPDATECERTIFICATESTATUS + "/" + u_id
+    );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserById = async (u_id) => {
+  try {
+    const res = await Request.get(ApiRoutes.GETUSERSDATABYID + "/" + u_id);
     return res;
   } catch (error) {
     throw error;

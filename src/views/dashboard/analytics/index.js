@@ -19,6 +19,7 @@ import { ThemeColors } from '@src/utility/context/ThemeColors'
 import { Row, Col, Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 
 // ** Demo Components
+import QuizReport from '../../pages/quizReport/QuizReport'
 import InvoiceList from '@src/views/apps/invoice/list'
 import Sales from '@src/views/ui-elements/cards/analytics/Sales'
 import AvgSessions from '@src/views/ui-elements/cards/analytics/AvgSessions'
@@ -34,6 +35,7 @@ import ceo from '@src/assets/images/portrait/small/avatar-s-9.jpg'
 
 // ** Styles
 import '@styles/react/libs/charts/apex-charts.scss'
+
 
 
 const AnalyticsDashboard = () => {
@@ -129,7 +131,7 @@ const AnalyticsDashboard = () => {
 
   return (
     <div id='dashboard-analytics'>
-      <Row className='match-height'>
+      {/* <Row className='match-height'>
         <Col lg='6' sm='12'>
           <CardCongratulations />
         </Col>
@@ -139,16 +141,16 @@ const AnalyticsDashboard = () => {
         <Col lg='3' sm='6'>
           <OrdersReceived kFormatter={kFormatter} warning={colors.warning.main} />
         </Col>
-      </Row>
-      <Row className='match-height'>
+      </Row> */}
+      {/* <Row className='match-height'>
         <Col lg='6' xs='12'>
           <AvgSessions primary={colors.primary.main} />
         </Col>
         <Col lg='6' xs='12'>
           <SupportTracker primary={colors.primary.main} danger={colors.danger.main} />
         </Col>
-      </Row>
-      <Row className='match-height'>
+      </Row> */}
+      {/* <Row className='match-height'>
         <Col lg='4' xs='12'>
           <Card className='card-user-timeline'>
             <CardHeader>
@@ -168,10 +170,10 @@ const AnalyticsDashboard = () => {
         <Col lg='4' md='6' xs='12'>
           <CardAppDesign />
         </Col>
-      </Row>
+      </Row> */}
       <Row className='match-height'>
         <Col xs='12'>
-          <InvoiceList />
+          <QuizReport />
         </Col>
       </Row>
     </div>

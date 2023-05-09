@@ -14,7 +14,7 @@ import themeConfig from "@configs/themeConfig";
 
 // ** Steps
 import PersonalInfo from "./steps/PersonalInfo";
-import AccountDetails from "./steps/AccountDetails";
+import ExtraDetails from "./steps/ExtraDetails";
 
 // ** Styles
 import "@styles/react/pages/page-authentication.scss";
@@ -62,7 +62,9 @@ const RegisterMultiSteps = () => {
     ...personalInfoDefaultValue,
     ...accountInfoDefaultValue,
   });
-
+  const details = navigator.userAgent;
+  const regExp = /android|iphone/i;
+  const isMobileDevice = regExp.test(details);
   const onHandleChange = (e, name) => {
     console.log(e, name, "!!!!!!!!!!");
     setRegisterData((prevState) => ({
@@ -115,10 +117,10 @@ const RegisterMultiSteps = () => {
     {
       id: "account-details",
       title: "Extra Information",
-      subtitle: "Enter username",
+      subtitle: "Enter Information",
       icon: <FileText size={18} />,
       content: (
-        <AccountDetails
+        <ExtraDetails
           stepper={stepper}
           onHandleChange={onHandleChange}
           registerData={registerData}
@@ -129,16 +131,19 @@ const RegisterMultiSteps = () => {
     },
   ];
   const source = require("@src/assets/images/pages/create-account.svg").default;
+  const registerImage = require(`@src/assets/images/logo/register.png`).default;
+
   return (
     <div className="auth-wrapper auth-cover">
       <Row className="auth-inner m-0">
-        <Link className="brand-logo" to="/">
-          <img
-            src={themeConfig.app.registrationLogoImage}
-            width="350px"
-            alt="logo"
-          />
-          {/* <svg viewBox="0 0 139 95" version="1.1" height="28">
+        {isMobileDevice && (
+          <Link className="brand-logo" to="/">
+            <img
+              src={themeConfig.app.registrationLogoImage}
+              width="325px"
+              alt="logo"
+            />
+            {/* <svg viewBox="0 0 139 95" version="1.1" height="28">
             <defs>
               <linearGradient
                 x1="100%"
@@ -205,17 +210,24 @@ const RegisterMultiSteps = () => {
             </g>
           </svg>
           <h2 className="brand-text text-primary ms-1">Vuexy</h2> */}
-        </Link>
+          </Link>
+        )}
+
         <Col lg="3" className="d-none d-lg-flex align-items-center p-0">
           <div className="w-100 d-lg-flex align-items-center justify-content-center">
-            <img className="img-fluid w-100" src={source} alt="Login Cover" />
+            <img
+              // className="img-fluid w-100"
+              src={registerImage}
+              alt="Register Cover"
+              style={{ maxWidth: "85%", height: "auto" }}
+            />
           </div>
         </Col>
         <Col
           lg="9"
           className="d-flex align-items-center auth-bg px-2 px-sm-3 px-lg-5 pt-3"
         >
-          <div className="width-700 mx-auto">
+          <div className="width-700 mx-auto" style={{ marginTop: "30px" }}>
             {/* {console.log("stepp", stepper)} */}
             <Wizard
               ref={ref}

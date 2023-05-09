@@ -20,7 +20,7 @@ import Question from "./Question";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import QuizPagination from "./QuizPagination";
 
-const Quiz = ({ video, step, handleChangeStep }) => {
+const Quiz = ({ video, step, handleChangeStep, videoList }) => {
   let user = JSON.parse(secureLocalStorage.getItem("userData"));
   const [questionList, setQuestionList] = useState([]);
   const [TotalQuestions, setTotalQuestions] = useState(0);
@@ -45,6 +45,7 @@ const Quiz = ({ video, step, handleChangeStep }) => {
     if (resp?.status == 1) {
       setResult(resp?.data);
       setAttempt(parseInt(resp?.data[0]?.attempt) + 1);
+      
     } else {
       setAttempt(1);
       // notification({

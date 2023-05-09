@@ -69,10 +69,19 @@ function Question() {
     e?.preventDefault();
     // console.log("daattttttttttttt", data);
     // if (Object.keys(errors).length == 0) {
+    console.log(
+      "questionData?.options?.length < 2",
+      questionData?.options?.length
+    );
     if (ans == -1) {
       notification({
         type: "error",
-        message: "please select Answer",
+        message: "Please select Answer",
+      });
+    } else if (questionData?.options?.length < 2) {
+      notification({
+        type: "error",
+        message: "Please enter at least 2 Options",
       });
     } else {
       console.log("datttt", questionData?.options);
@@ -222,21 +231,21 @@ function Question() {
   const column = [
     {
       name: "No.",
-      // selector: (row) => row.row_no,
-      cell: (row, index) => index,
+      selector: (row) => row.row_no,
+      // cell: (row, index) => index,
       sortable: true,
     },
     {
       name: "Name",
-      selector: (row) => row.question,
+      selector: (row) => row?.question,
     },
     {
       name: "Answer",
-      selector: (row) => row.c_answer,
+      selector: (row) => row?.c_answer,
     },
     {
       name: "Video",
-      selector: (row) => row.v_name,
+      selector: (row) => row?.v_name,
     },
     {
       name: "Actions",
@@ -299,7 +308,7 @@ function Question() {
             <CardTitle tag="h4">Questions List</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="d-flex mt-1">
+            <div className="d-flex mt-1 mb-1">
               <Button
                 className="me-1"
                 color="primary"
@@ -317,20 +326,23 @@ function Question() {
                 <ComponentSpinner />
               </div>
             ) : (
-              <DataTable
-                noHeader
-                pagination
-                columns={column}
-                // paginationPerPage={10}
-                // className="react-dataTable"
-                // sortIcon={<ChevronDown size={10} />}
-                // paginationDefaultPage={currentPage + 1}
-                // paginationComponent={CustomPagination}
-                data={questionList}
-                expandableRows
-                expandableRowsComponent={ExpandableRow}
-                // selectableRowsComponent={BootstrapCheckbox}
-              />
+              <div className="react-dataTable">
+                <DataTable
+                  noHeader
+                  pagination
+                  columns={column}
+                  // paginationPerPage={10}
+                  // className="react-dataTable"
+                  // sortIcon={<ChevronDown size={10} />}
+                  // paginationDefaultPage={currentPage + 1}
+                  // paginationComponent={CustomPagination}
+                  data={questionList}
+                  expandableRows
+                  expandableRowsComponent={ExpandableRow}
+                  // selectableRowsComponent={BootstrapCheckbox}
+                  className="react-dataTable"
+                />
+              </div>
             )}
           </CardBody>
         </Card>
