@@ -10,7 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "reactstrap";
-import { getQuizResult, updateCertificateStatus } from "../../../@core/api/common_api";
+import {
+  getQuizResult,
+  updateCertificateStatus,
+} from "../../../@core/api/common_api";
 import { notification } from "../../../@core/constants/notification";
 import { countPassingScore } from "../../../@core/components/common/Common";
 import { ArrowLeft } from "react-feather";
@@ -25,6 +28,8 @@ const QuizResult = ({
   postResult,
   handleQuizResult,
   handleNext,
+  courseList,
+  currentCourse,
 }) => {
   let user = JSON.parse(secureLocalStorage.getItem("userData"));
   // const [preResult, setPreResult] = useState({});
@@ -60,7 +65,10 @@ const QuizResult = ({
       videoList?.length,
       currentVideo
     );
-    if (videoList?.length - 1 === currentVideo) {
+    if (
+      videoList?.length - 1 === currentVideo &&
+      currentCourse == courseList?.length - 1
+    ) {
       console.log("₹₹₹₹₹₹₹₹₹₹₹₹", postResult);
       if (
         countPassingScore(postResult?.total_question, 70) <=

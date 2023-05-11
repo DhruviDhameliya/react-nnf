@@ -15,6 +15,8 @@ export const ApiRoutes = {
   DELETEOPTION: "delete-option",
   UPDATEVIDEOPERCENTAGE: "update-videopercentage",
   INSERTVIDEOPERCENTAGE: "insert-videopercentage",
+  GETCOURSEWITHVIDEODATA: "get-coursewithvideodata",
+  CHECKCOURSEACCESS: "check-courseaccess",
   GETVIDEOSWITHPERCENTAGE: "get-videoswithpercentage",
   GETQUESTIONSFORQUIZ: "get-questionforquiz",
   GETOPTIONSFORQUIZBYID: "get-optionforquiz",
@@ -31,4 +33,6 @@ export const ApiRoutes = {
   GETEXCELQUIZREPORT: "get-quizexcelreport",
   UPDATECERTIFICATESTATUS: "update-certificatestatus",
   GETUSERSDATABYID: "get-userbyid",
+  SENDOTP: "send-otp",
+  UPDATENEWPASSWORD: "update-newpassword",
 };

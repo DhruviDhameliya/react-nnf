@@ -1,26 +1,101 @@
 // ** React Imports
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 
 // ** Icons Imports
-import { ChevronLeft } from 'react-feather'
+import { ChevronLeft } from "react-feather";
 
 // ** Custom Components
-import InputPassword from '@components/input-password-toggle'
-
+import InputPassword from "@components/input-password-toggle";
+import InputPasswordToggle from "@components/input-password-toggle";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 // ** Reactstrap Imports
-import { Card, CardBody, CardTitle, CardText, Form, Label, Button } from 'reactstrap'
-
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+  Form,
+  Label,
+  Button,
+  FormFeedback,
+} from "reactstrap";
+import logo1 from "@src/assets/images/logo/logo1.jpeg";
 // ** Styles
-import '@styles/react/pages/page-authentication.scss'
+import "@styles/react/pages/page-authentication.scss";
+import { Controller, useForm } from "react-hook-form";
+import { Fragment } from "react";
+import { updateNewPassword } from "../../../@core/api/common_api";
+import { notification } from "../../../@core/constants/notification";
 
 const ResetPasswordBasic = () => {
+  const navigate = useNavigate();
+
+  const defaultValues = {
+    n_password: "",
+    confirmPassword: "",
+  };
+  const SignupSchema = yup.object().shape({
+    n_password: yup.string().required("Password is Required"),
+    confirmPassword: yup
+      .string()
+      .required("Confirm Password is Required")
+      .oneOf([yup.ref(`n_password`), null], "Passwords must match"),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    defaultValues,
+    resolver: yupResolver(SignupSchema),
+  });
+
+  const onSubmit = async (data) => {
+    console.log("data", data);
+    console.log("errorsssssssssssss", errors);
+    console.log(
+      "auth_token: window.location.pathname.split(/).pop(),",
+      window.location.pathname.split("/").pop()
+    );
+    let passwordData = {
+      ...data,
+      otp: window.location.pathname.split("/").pop(),
+    };
+    if (Object.keys(errors).length == 0) {
+      let resp = await updateNewPassword(passwordData);
+      console.log("resspp", resp);
+      if (resp?.status == 1) {
+        notification({
+          type: "success",
+          position: "top-right",
+          message: resp?.message,
+        });
+        navigate("/login");
+      } else {
+        notification({
+          type: "error",
+          position: "top-right",
+          message: resp?.message,
+        });
+      }
+    }
+  };
+
   return (
-    <div className='auth-wrapper auth-basic px-2'>
-      <div className='auth-inner my-2'>
-        <Card className='mb-0'>
-          <CardBody>
-            <Link className='brand-logo' to='/' onClick={e => e.preventDefault()}>
-              <svg viewBox='0 0 139 95' version='1.1' height='28'>
+    <Fragment>
+      <div className="auth-wrapper auth-basic px-2">
+        <div className="auth-inner my-2">
+          <Card className="mb-0">
+            <CardBody>
+              <Link
+                className="brand-logo"
+                to="/"
+                onClick={(e) => e.preventDefault()}
+              >
+                {/* <svg viewBox='0 0 139 95' version='1.1' height='28'>
                 <defs>
                   <linearGradient x1='100%' y1='10.5120544%' x2='50%' y2='89.4879456%' id='linearGradient-1'>
                     <stop stopColor='#000000' offset='0%'></stop>
@@ -68,40 +143,99 @@ const ResetPasswordBasic = () => {
                   </g>
                 </g>
               </svg>
-              <h2 className='brand-text text-primary ms-1'>Vuexy</h2>
-            </Link>
-            <CardTitle tag='h4' className='mb-1'>
-              Reset Password 🔒
-            </CardTitle>
-            <CardText className='mb-2'>Your new password must be different from previously used passwords</CardText>
-            <Form className='auth-reset-password-form mt-2' onSubmit={e => e.preventDefault()}>
-              <div className='mb-1'>
-                <Label className='form-label' for='new-password'>
-                  New Password
-                </Label>
-                <InputPassword className='input-group-merge' id='new-password' autoFocus />
-              </div>
-              <div className='mb-1'>
-                <Label className='form-label' for='confirm-password'>
-                  Confirm Password
-                </Label>
-                <InputPassword className='input-group-merge' id='confirm-password' />
-              </div>
-              <Button color='primary' block>
-                Set New Password
-              </Button>
-            </Form>
-            <p className='text-center mt-2'>
-              <Link to='/pages/login-basic'>
-                <ChevronLeft className='rotate-rtl me-25' size={14} />
-                <span className='align-middle'>Back to login</span>
+              <h2 className='brand-text text-primary ms-1'>Vuexy</h2> */}
+                <div className="d-flex justify-content-center ">
+                  <img src={logo1} width="130px" alt="logo" />
+                </div>
               </Link>
-            </p>
-          </CardBody>
-        </Card>
+              <CardTitle tag="h4" className="mb-1">
+                Reset Password 🔒
+              </CardTitle>
+              <CardText className="mb-2">
+                Your new password must be different from previously used
+                passwords
+              </CardText>
+              <Form
+                className="auth-reset-password-form mt-2"
+                // onSubmit={e => e.preventDefault()}
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div className="mb-1">
+                  <Label className="form-label" for="new-password">
+                    New Password
+                  </Label>
+                  {/* <InputPassword className='input-group-merge' id='new-password' autoFocus /> */}
+                  <Controller
+                    id="n_password"
+                    name="n_password"
+                    control={control}
+                    render={({ field }) => (
+                      <InputPasswordToggle
+                        id="n_password"
+                        name="n_password"
+                        label="New Password"
+                        htmlFor="n_password"
+                        className="input-group-merge"
+                        invalid={errors?.n_password && true}
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e.target?.value);
+                          // onHandleChange(e.target?.value, e.target?.name);
+                        }}
+                      />
+                    )}
+                  />
+                  {errors?.n_password && (
+                    <FormFeedback>{errors?.n_password?.message}</FormFeedback>
+                  )}
+                </div>
+                <div className="mb-1">
+                  <Label className="form-label" for="confirm-password">
+                    Confirm Password
+                  </Label>
+                  {/* <InputPassword className='input-group-merge' id='confirm-password' /> */}
+                  <Controller
+                    control={control}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <InputPasswordToggle
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        label="Confirm Password"
+                        htmlFor="confirmPassword"
+                        className="input-group-merge"
+                        invalid={errors?.confirmPassword && true}
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e.target?.value);
+                          // onHandleChange(e.target?.value, e.target?.name);
+                        }}
+                      />
+                    )}
+                  />
+                  {errors?.confirmPassword && (
+                    <FormFeedback>
+                      {errors?.confirmPassword?.message}
+                    </FormFeedback>
+                  )}
+                </div>
+                <Button color="primary" block type="submit">
+                  Set New Password
+                </Button>
+              </Form>
+              <p className="text-center mt-2">
+                <Link to="/pages/login-basic">
+                  <ChevronLeft className="rotate-rtl me-25" size={14} />
+                  <span className="align-middle">Back to login</span>
+                </Link>
+              </p>
+            </CardBody>
+          </Card>
+        </div>
       </div>
-    </div>
-  )
-}
+    </Fragment>
+  );
+};
 
-export default ResetPasswordBasic
+export default ResetPasswordBasic;

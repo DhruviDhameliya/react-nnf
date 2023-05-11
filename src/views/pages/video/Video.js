@@ -19,7 +19,7 @@ import {
   Col,
 } from "reactstrap";
 import {
-  // getCourses,
+  getCourses,
   getVideos,
   insertVideo,
   updateVideo,
@@ -27,24 +27,24 @@ import {
 import { notification } from "../../../@core/constants/notification";
 import DataTable from "react-data-table-component";
 import { useEffect } from "react";
-// import Select from "react-select";
+import Select from "react-select";
 import ReactPlayer from "react-player";
-// import classnames from "classnames";
+import classnames from "classnames";
 
 const defaultValues = {
   v_name: "",
   v_link: "",
-  // c_id: "",
+  c_id: "",
 };
 
 function Video() {
   const [videoData, setVideoData] = useState(defaultValues);
   const [step, setStep] = useState(0);
   const [videoList, setVideoList] = useState([]);
-  // const [courseList, setCourseList] = useState([]);
+  const [courseList, setCourseList] = useState([]);
   const [isVideoLoading, setIsVideoLoading] = useState(false);
   const SignupSchema = yup.object().shape({
-    // c_id: yup.string().required("Please Select Course"),
+    c_id: yup.string().required("Please Select Category"),
     v_link: yup.string().required("Video Link is Required"),
     v_name: yup.string().required("Video Name is Required "),
   });
@@ -65,7 +65,7 @@ function Video() {
 
   useEffect(() => {
     getVideoList();
-    // getCourseList();
+    getCourseList();
   }, []);
 
   const onHandleChange = (e, name) => {
@@ -114,18 +114,18 @@ function Video() {
     getVideoList();
   };
 
-  // const getCourseList = async () => {
-  //   let resp = await getCourses();
-  //   console.log(resp);
-  //   if (resp?.status == 1) {
-  //     setCourseList(resp?.data);
-  //   } else {
-  //     notification({
-  //       type: "error",
-  //       message: resp?.message,
-  //     });
-  //   }
-  // };
+  const getCourseList = async () => {
+    let resp = await getCourses();
+    console.log(resp);
+    if (resp?.status == 1) {
+      setCourseList(resp?.data);
+    // } else {
+    //   notification({
+    //     type: "error",
+    //     message: resp?.message,
+    //   });
+    }
+  };
 
   const getVideoList = async () => {
     let resp = await getVideos();
@@ -168,6 +168,7 @@ function Video() {
       selector: (row) => row?.row_no,
       // cell: (row, index) => index,
       sortable: true,
+      width: "70px",
     },
     {
       name: "Name",
@@ -177,10 +178,10 @@ function Video() {
       name: "Link",
       selector: (row) => row?.v_link,
     },
-    // {
-    //   name: "Course Name",
-    //   selector: (row) => row?.course_name,
-    // },
+    {
+      name: "Category Name",
+      selector: (row) => row?.course_name,
+    },
     {
       name: "Actions",
       allowOverflow: true,
@@ -196,7 +197,7 @@ function Video() {
                   setStep(2);
                   setVideoData(row);
                   console.log("rowwwww", row);
-                  const fields = ["v_name", "v_link"];
+                  const fields = ["v_name", "v_link","c_id"];
                   fields.forEach((field) => setValue(field, row[field]));
                 }}
               />
@@ -260,9 +261,9 @@ function Video() {
           </CardHeader>
           <CardBody>
             <Form onSubmit={handleSubmit(onSubmit)}>
-              {/* <div className="mb-1">
+              <div className="mb-1">
                 <Label className="form-label" for="c_id">
-                  Course
+                  Category
                 </Label>
                 <Controller
                   control={control}
@@ -304,7 +305,7 @@ function Video() {
                 {errors?.c_id && (
                   <FormFeedback>{errors?.c_id?.message}</FormFeedback>
                 )}
-              </div> */}
+              </div>
               <div className="mb-1">
                 <Label className="form-label" for="v_name">
                   Video Name
@@ -318,7 +319,7 @@ function Video() {
                       {...field}
                       id="v_name"
                       name="v_name"
-                      autoFocus
+                      // autoFocus
                       placeholder="Enter Video Name"
                       invalid={errors.v_name && true}
                       // value={videoData?.name}
