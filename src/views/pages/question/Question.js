@@ -234,6 +234,7 @@ function Question() {
       selector: (row) => row.row_no,
       // cell: (row, index) => index,
       sortable: true,
+      width: "70px",
     },
     {
       name: "Name",

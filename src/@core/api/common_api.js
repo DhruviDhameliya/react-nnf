@@ -139,10 +139,30 @@ export const updateVideoPercentage = async (data) => {
   }
 };
 
-export const getVideosWithPercentage = async (u_id) => {
+export const getCourseWithVideoData = async (u_id) => {
   try {
     const res = await Request.get(
-      ApiRoutes.GETVIDEOSWITHPERCENTAGE + "/" + u_id
+      ApiRoutes.GETCOURSEWITHVIDEODATA + "/" + u_id
+    );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const checkCourseAccess = async (u_id) => {
+  try {
+    const res = await Request.get(ApiRoutes.CHECKCOURSEACCESS + "/" + u_id);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVideosWithPercentage = async (u_id, course_id) => {
+  try {
+    const res = await Request.get(
+      ApiRoutes.GETVIDEOSWITHPERCENTAGE + "/" + u_id + "/" + course_id
     );
     return res;
   } catch (error) {
@@ -282,6 +302,24 @@ export const updateCertificateStatus = async (u_id) => {
 export const getUserById = async (u_id) => {
   try {
     const res = await Request.get(ApiRoutes.GETUSERSDATABYID + "/" + u_id);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendOtp = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.SENDOTP, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateNewPassword = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.UPDATENEWPASSWORD, data);
     return res;
   } catch (error) {
     throw error;

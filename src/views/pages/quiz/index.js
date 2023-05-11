@@ -32,8 +32,9 @@ import { useDispatch, useSelector } from "react-redux";
 // ** Styles
 import "@styles/react/apps/app-email.scss";
 import QuizVideo from "./QuizVideo";
-import Videos from "./Videos";
+import Videos from "./List";
 import {
+  getCourseWithVideoData,
   getQuizResult,
   getVideosWithPercentage,
 } from "../../../@core/api/common_api";
@@ -44,6 +45,7 @@ import Quiz from "./Quiz";
 import { Menu } from "react-feather";
 import QuizResult from "./QuizResult";
 import { countPassingScore } from "../../../@core/components/common/Common";
+import List from "./List";
 
 const QuizApp = () => {
   // ** States
@@ -53,6 +55,8 @@ const QuizApp = () => {
   const [openMail, setOpenMail] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [composeOpen, setComposeOpen] = useState(false);
+  const [courseList, setCourseList] = useState([]);
+  const [currentCourse, setCurrentCourse] = useState(0);
   const [videoList, setVideoList] = useState([]);
   const [step, setStep] = useState(0);
   const [currentVideo, setCurrentVideo] = useState(0);
@@ -69,15 +73,23 @@ const QuizApp = () => {
 
   // ** Vars
   const params = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getVideoList();
+    getCourseList();
+    // getVideoList(currentCourse);
   }, []);
 
   useEffect(() => {
-    getVideoList();
+    if (courseList?.length != 0) {
+      getVideoList(currentCourse);
+    }
   }, [preResult, postResult]);
+
+  const handleChangeCourse = (index) => {
+    // getVideoList(index);
+    setCurrentCourse(index);
+  };
 
   const handleChangeVideo = (index) => {
     setCurrentVideo(index);
@@ -87,15 +99,34 @@ const QuizApp = () => {
     // handleQuizResult(video?.v_id, 1);
   };
 
+  const getCourseAccess = async (c_id) => {
+    let resp = await getVideosWithPercentage(user?.u_id, c_id);
+    if (resp?.status == 1) {
+      return resp?.data;
+    }
+  };
+
   const handleNext = async (index) => {
-    console.log("|incedx", index);
-    if (index <= videoList?.length - 1) {
-      if (
-        index == 0 ||
-        (index != 0 &&
-          countPassingScore(videoList[index - 1]?.total_question, 70) <=
-            videoList[index - 1]?.total_correct_ans)
-      ) {
+    console.log("|incedx", index, videoList?.length - 1);
+    // if (
+    //   currentCourse == courseList?.length - 1 &&
+    //   index == videoList?.length - 1
+    // ) {
+    //   navigate("/certificate");
+    // } else {
+    if (
+      index == 0 ||
+      (index != 0 &&
+        countPassingScore(videoList[index - 1]?.total_question, 70) <=
+          videoList[index - 1]?.total_correct_ans)
+    ) {
+      if (index == videoList?.length) {
+        if (currentCourse == courseList?.length - 1) {
+          navigate("/certificate");
+        } else {
+          handleChangeStep(0);
+        }
+      } else {
         await handleChangeVideo(index);
         let pre = await handleQuizResult(videoList[index]?.v_id, 0);
         let post = await handleQuizResult(videoList[index]?.v_id, 1);
@@ -110,20 +141,68 @@ const QuizApp = () => {
           handleChangeStep(2);
         }
       }
-    } else {
-      navigate("/certificate")
+      // }
     }
+
+    // if (
+    //   index <= videoList?.length - 1 &&
+    //   currentCourse <= courseList?.length - 1
+    // ) {
+    //   console.log("ifff", index, videoList?.length - 1);
+    //   console.log("currentCourse", currentCourse, courseList?.length - 1);
+
+    //   if (
+    //     index == 0 ||
+    //     (index != 0 &&
+    //       countPassingScore(videoList[index - 1]?.total_question, 70) <=
+    //         videoList[index - 1]?.total_correct_ans)
+    //   ) {
+    //     await handleChangeVideo(index);
+    //     let pre = await handleQuizResult(videoList[index]?.v_id, 0);
+    //     let post = await handleQuizResult(videoList[index]?.v_id, 1);
+    //     if (Object?.keys(pre)?.length != 0) {
+    //       console.log("ifffffffffff");
+    //       await handleChangeStep(3);
+    //     } else if (Object?.keys(post)?.length != 0) {
+    //       await handleChangeStep(5);
+    //     } else if (index == 0) {
+    //       await handleChangeStep(1);
+    //     } else {
+    //       handleChangeStep(2);
+    //     }
+    //   }
+    // } else {
+    //   console.log("else");
+    //   navigate("/certificate");
+    // }
   };
 
   const handleChangeStep = (step) => {
     setStep(step);
   };
 
-  const getVideoList = async () => {
-    let resp = await getVideosWithPercentage(user?.u_id);
+  const getCourseList = async () => {
+    let resp = await getCourseWithVideoData(user?.u_id);
+    console.log(resp);
+    if (resp?.status == 1) {
+      setCourseList(resp?.data);
+    } else {
+      notification({
+        type: "error",
+        message: resp?.message,
+      });
+    }
+  };
+
+  const getVideoList = async (course) => {
+    let resp = await getVideosWithPercentage(
+      user?.u_id,
+      courseList[course]?.c_id
+    );
     console.log(resp);
     if (resp?.status == 1) {
       setVideoList(resp?.data);
+      return resp?.data;
     } else {
       notification({
         type: "error",
@@ -162,7 +241,10 @@ const QuizApp = () => {
   return (
     <Fragment>
       {step == 0 ? (
-        <Videos
+        <List
+          getVideoList={getVideoList}
+          courseList={courseList}
+          handleChangeCourse={handleChangeCourse}
           videoList={videoList}
           handleChangeVideo={handleChangeVideo}
           handleChangeStep={handleChangeStep}
@@ -263,6 +345,8 @@ const QuizApp = () => {
                     preResult={preResult}
                     postResult={postResult}
                     handleNext={handleNext}
+                    courseList={courseList}
+                    currentCourse={currentCourse}
                   />
                 )}
               </div>

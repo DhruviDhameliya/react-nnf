@@ -226,12 +226,12 @@ let adminRoutes = [
     icon: <Home size={20} />,
     navLink: "/dashboard",
   },
-  // {
-  //   id: "course",
-  //   title: "Course",
-  //   icon: <Folder size={20} />,
-  //   navLink: "/course",
-  // },
+  {
+    id: "course",
+    title: "Category",
+    icon: <Folder size={20} />,
+    navLink: "/category",
+  },
   {
     id: "videos",
     title: "Videos",

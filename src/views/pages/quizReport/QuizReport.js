@@ -185,6 +185,7 @@ const QuizReport = () => {
       name: "No.",
       cell: (row, index) =>
         parseInt(currentPage - 1) * parseInt(rowsPerPage) + parseInt(index + 1),
+        width: "70px",
     },
     {
       name: "User name",

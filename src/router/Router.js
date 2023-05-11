@@ -103,12 +103,20 @@ const RegisterMultiSteps = lazy(() =>
 const EmailVerified = lazy(() =>
   import("../views/pages/authentication/VerifyEmailBasic")
 );
+const ForgotPassword = lazy(() =>
+  import("../views/pages/authentication/ForgotPasswordBasic")
+);
+
 const ForgotPass = lazy(() =>
   import("../views/pages/authentication/ForgotPassword")
 );
+
 const NotAuthorized = lazy(() => import("../views/pages/misc/NotAuthorized"));
 const ResetPasswordCover = lazy(() =>
   import("../views/pages/authentication/ResetPasswordCover")
+);
+const ResetPasswordBasic = lazy(() =>
+  import("../views/pages/authentication/ResetPasswordBasic")
 );
 // const Inquiry = lazy(() => import("../../views/pages/Lead/inquiry"));
 // const Inquiry = lazy(() => import("../views/pages/Lead/inquiry"));
@@ -187,7 +195,7 @@ const Router = () => {
       {
         path: "/forgot-password",
         element: <BlankLayout />,
-        children: [{ path: "/forgot-password", element: <ForgotPass /> }],
+        children: [{ path: "/forgot-password", element: <ForgotPassword /> }],
       },
       {
         path: "/reset-password-cover/:code",
@@ -196,6 +204,16 @@ const Router = () => {
           {
             path: "/reset-password-cover/:code",
             element: <ResetPasswordCover />,
+          },
+        ],
+      },
+      {
+        path: "/reset-password/:code",
+        element: <BlankLayout />,
+        children: [
+          {
+            path: "/reset-password/:code",
+            element: <ResetPasswordBasic />,
           },
         ],
       },

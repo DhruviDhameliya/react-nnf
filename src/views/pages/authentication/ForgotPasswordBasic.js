@@ -1,22 +1,87 @@
 // ** React Imports
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 
 // ** Icons Imports
-import { ChevronLeft } from 'react-feather'
+import { ChevronLeft } from "react-feather";
 
 // ** Reactstrap Imports
-import { Card, CardBody, CardTitle, CardText, Form, Label, Input, Button } from 'reactstrap'
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+  Form,
+  Label,
+  Input,
+  Button,
+  Col,
+  FormFeedback,
+} from "reactstrap";
+import logo1 from "@src/assets/images/logo/logo1.jpeg";
 
 // ** Styles
-import '@styles/react/pages/page-authentication.scss'
+import "@styles/react/pages/page-authentication.scss";
+import { Controller, useForm } from "react-hook-form";
+import { sendOtp } from "../../../@core/api/common_api";
+import { notification } from "../../../@core/constants/notification";
+import { useState } from "react";
+
 const ForgotPasswordBasic = () => {
+  const navigate = useNavigate();
+  const [submitDisable,setSubmitDisable]=useState(false);
+
+  const defaultValues = {
+    u_email: "",
+  };
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues });
+
+  const onSubmit = async (data) => {
+    console.log("datataaa", data);
+    if (Object.values(data).every((field) => field.length > 0)) {
+      console.log("data", data);
+      setSubmitDisable(true)
+      const response = await sendOtp(data);
+      console.log(response, "response");
+      if (response?.status === 1) {
+        notification({
+          type: "success",
+          message: "Password reset link has been sent to your Mail",
+        });
+        navigate("/login");
+      } else {
+        notification({
+          type: "error",
+          message: response.message,
+        });
+      }
+      setSubmitDisable(false)
+    } else {
+      for (const key in data) {
+        if (data[key]?.length === 0) {
+          setError(key, {
+            type: "manual",
+          });
+        }
+      }
+    }
+  };
   return (
-    <div className='auth-wrapper auth-basic px-2'>
-      <div className='auth-inner my-2'>
-        <Card className='mb-0'>
+    <div className="auth-wrapper auth-basic px-2">
+      <div className="auth-inner my-2">
+        <Card className="mb-0">
           <CardBody>
-            <Link className='brand-logo' to='/' onClick={e => e.preventDefault()}>
-              <svg viewBox='0 0 139 95' version='1.1' height='28'>
+            <Link
+              className="brand-logo"
+              to="/"
+              onClick={(e) => e.preventDefault()}
+            >
+              {/* <svg viewBox='0 0 139 95' version='1.1' height='28'>
                 <defs>
                   <linearGradient x1='100%' y1='10.5120544%' x2='50%' y2='89.4879456%' id='linearGradient-1'>
                     <stop stopColor='#000000' offset='0%'></stop>
@@ -63,37 +128,76 @@ const ForgotPasswordBasic = () => {
                     </g>
                   </g>
                 </g>
-              </svg>
-              <h2 className='brand-text text-primary ms-1'>Vuexy</h2>
+              </svg> */}
+              {/* <h2 className='brand-text text-primary ms-1'>Vuexy</h2> */}
+              {/* <h2 className='brand-text text-primary ms-1'>Welcome to Online Kangaroo Mother Care Self Learning Module</h2> */}
+
+              <div className="d-flex justify-content-center ">
+                <img src={logo1} width="130px" alt="logo" />
+              </div>
             </Link>
-            <CardTitle tag='h4' className='mb-1'>
+            <CardTitle tag="h4" className="mb-1">
               Forgot Password? 🔒
             </CardTitle>
-            <CardText className='mb-2'>
-              Enter your email and we'll send you instructions to reset your password
+            <CardText className="mb-2">
+              Enter your email and we'll send you instructions to reset your
+              password
             </CardText>
-            <Form className='auth-forgot-password-form mt-2' onSubmit={e => e.preventDefault()}>
-              <div className='mb-1'>
-                <Label className='form-label' for='login-email'>
+            <Form
+              className="auth-forgot-password-form mt-2"
+              // onSubmit={(e) =>{ e.preventDefault();}}
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <div className="mb-1">
+                <Label className="form-label" for="u_email">
                   Email
                 </Label>
-                <Input type='email' id='login-email' placeholder='john@example.com' autoFocus />
+                {/* <Input
+                  type="email"
+                  id="login-email"
+                  placeholder="john@example.com"
+                  autoFocus
+                /> */}
+
+                <Controller
+                  id="u_email"
+                  name="u_email"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      autoFocus
+                      id="u_email"
+                      name="u_email"
+                      type=""
+                      placeholder="Enter Mobile Number or Email"
+                      invalid={errors.u_email && true}
+                      {...field}
+                      // onChange={(e) => {
+                      //   field.onChange(e.target?.value);
+                      //   onHandleChange(e.target?.value, e.target?.name);
+                      // }}
+                    />
+                  )}
+                />
+                {errors?.u_email && (
+                  <FormFeedback>{errors?.u_email?.message}</FormFeedback>
+                )}
               </div>
-              <Button color='primary' block>
+              <Button color="primary" block disabled={submitDisable}>
                 Send reset link
               </Button>
             </Form>
-            <p className='text-center mt-2'>
-              <Link to='/pages/login-basic'>
-                <ChevronLeft className='rotate-rtl me-25' size={14} />
-                <span className='align-middle'>Back to login</span>
+            <p className="text-center mt-2">
+              <Link to="/pages/login-basic">
+                <ChevronLeft className="rotate-rtl me-25" size={14} />
+                <span className="align-middle">Back to login</span>
               </Link>
             </p>
           </CardBody>
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ForgotPasswordBasic
+export default ForgotPasswordBasic;

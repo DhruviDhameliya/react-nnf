@@ -38,7 +38,7 @@ function Course() {
   const [courseList, setCourseList] = useState([]);
   const [isCourseLoading, setIsCourseLoading] = useState(false);
   const SignupSchema = yup.object().shape({
-    course_name: yup.string().required("Course Name is Required "),
+    course_name: yup.string().required("Category Name is Required "),
   });
 
   const {
@@ -116,6 +116,7 @@ function Course() {
       selector: (row) => row?.row_no,
       // cell: (row, index) => index,
       sortable: true,
+      width: "70px",
     },
     {
       name: "Name",
@@ -127,7 +128,7 @@ function Course() {
       cell: (row) => {
         return (
           <div>
-            <span title="Edit Course">
+            <span title="Edit Category">
               <Edit
                 size={15}
                 style={{ marginRight: "5px", cursor: "pointer" }}
@@ -152,7 +153,7 @@ function Course() {
       {step == 0 ? (
         <Card>
           <CardHeader className="flex-md-row flex-column align-md-items-center align-items-center border-bottom">
-            <CardTitle tag="h4">Course List</CardTitle>
+            <CardTitle tag="h4">Category List</CardTitle>
           </CardHeader>
           <CardBody>
             <div className="d-flex mt-1">
@@ -165,7 +166,7 @@ function Course() {
                 }}
               >
                 <Plus size={15} />
-                Add Course
+                Add Category
               </Button>
             </div>
             {isCourseLoading ? (
@@ -192,14 +193,14 @@ function Course() {
         <Card>
           <CardHeader>
             <CardTitle tag="h4">
-              {step == 1 ? "Add Course" : "Edit Course"}
+              {step == 1 ? "Add Category" : "Edit Category"}
             </CardTitle>
           </CardHeader>
           <CardBody>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-1">
                 <Label className="form-label" for="course_name">
-                  Course Name
+                  Category Name
                 </Label>
                 <Controller
                   id="course_name"
@@ -211,7 +212,7 @@ function Course() {
                       id="course_name"
                       name="course_name"
                       autoFocus
-                      placeholder="Enter Course Name"
+                      placeholder="Enter Category Name"
                       invalid={errors.course_name && true}
                       // value={courseData?.name}
                       onChange={(e) => {

@@ -148,13 +148,12 @@ const Login = () => {
         } else {
           window.location.href = `${getHomeRouteForLoggedInUser("client")}`;
         }
-        setLoading(false);
-
         notification({
           type: "success",
           // title: "Login Successfully",
           message: response.message,
         });
+        setLoading(false);
         // navigate("/register");
       } else {
         setLoading(false);
@@ -350,7 +349,7 @@ const Login = () => {
                   Remember Me
                 </Label>
               </div> */}
-              <Button type="submit" color="primary" block>
+              <Button type="submit" color="primary" block disabled={loading}>
                 Sign in
               </Button>
             </Form>
@@ -380,7 +379,7 @@ const Login = () => {
           </Col>
         </Col>
         <div
-          className="w-100 d-lg-flex align-items-end justify-content-end mb-0"
+          className="w-100 d-lg-flex align-items-end justify-content-end mb-0 p-0"
           style={{ overflow: "hidden" }}
         >
           <div className="bar">
