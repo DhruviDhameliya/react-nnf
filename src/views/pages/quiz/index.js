@@ -125,6 +125,7 @@ const QuizApp = () => {
           navigate("/certificate");
         } else {
           handleChangeStep(0);
+          getCourseList();
         }
       } else {
         await handleChangeVideo(index);

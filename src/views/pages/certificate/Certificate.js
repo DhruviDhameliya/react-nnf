@@ -34,11 +34,11 @@ const Certificate = () => {
           context.textAlign = "center";
           context.fillText(resp?.name, 550, 315);
           context.font = "small-caps bold 16px serif";
-          context.fillText(resp?.certificate_name, 855, 395);
+          context.fillText(resp?.certificate_name, 660, 445);
           context.fillText(
             moment(resp?.created_timestamp).format("DD-MM-YYYY"),
-            660,
-            445
+            855,
+            395
           );
           setImagePreview(myCanvas?.current?.toDataURL("image/png"));
           // if (localStorage.getItem("counter") !== "1") {

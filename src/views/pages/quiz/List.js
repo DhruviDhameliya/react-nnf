@@ -141,9 +141,9 @@ function List({
             o.percentage == null ||
             o.total_question == null ||
             o.total_correct_ans == null ||
-          (  o.total_question != null &&
-            o.total_correct_ans != null &&
-            countPassingScore(o?.total_question, 70) > o?.total_correct_ans)
+            (o.total_question != null &&
+              o.total_correct_ans != null &&
+              countPassingScore(o?.total_question, 70) > o?.total_correct_ans)
         );
         let video = newObj?.length == 0 ? videos[0] : newObj[0];
 
@@ -222,6 +222,87 @@ function List({
           <Row>
             {courseList &&
               courseList?.map((course, index) => {
+                let obj;
+                let obj1;
+                let access = false;
+                if (index != 0) {
+                  if (
+                    courseList[index - 1]?.videoList &&
+                    courseList[index - 1]?.videoList?.length > 0
+                  ) {
+                    obj1 = courseList[index - 1]?.videoList.filter(
+                      (o) =>
+                        o.percentage == null ||
+                        o.total_question == null ||
+                        o.total_correct_ans == null
+                    );
+                  }
+
+                  if (
+                    obj1.length == 0 &&
+                    countPassingScore(
+                      courseList[index - 1]?.videoList[
+                        courseList[index - 1]?.videoList?.length - 1
+                      ]?.total_question,
+                      70
+                    ) <=
+                      courseList[index - 1]?.videoList[
+                        courseList[index - 1]?.videoList?.length - 1
+                      ]?.total_correct_ans
+                  ) {
+                    access = true;
+                  }
+                  console.log("accesssssss33333333", access);
+
+                  if (course?.videoList && course?.videoList?.length > 0) {
+                    obj = course?.videoList.filter(
+                      (o) =>
+                        o.percentage == null ||
+                        o.total_question == null ||
+                        o.total_correct_ans == null
+                    );
+                  }
+                  if (
+                    obj.length == 0 &&
+                    countPassingScore(
+                      course?.videoList[course?.videoList?.length - 1]
+                        ?.total_question,
+                      70
+                    ) <=
+                      course?.videoList[course?.videoList?.length - 1]
+                        ?.total_correct_ans
+                  ) {
+                    access = access == true && "complete";
+                  } else if (obj.length == 0) {
+                    access = access == true && "playing";
+                  }
+                  console.log("accesssssss1111111111", access);
+                } else {
+                  if (course?.videoList && course?.videoList?.length > 0) {
+                    obj = course?.videoList.filter(
+                      (o) =>
+                        o.percentage == null ||
+                        o.total_question == null ||
+                        o.total_correct_ans == null
+                    );
+                  }
+                  if (
+                    obj.length == 0 &&
+                    countPassingScore(
+                      course?.videoList[course?.videoList?.length - 1]
+                        ?.total_question,
+                      70
+                    ) <=
+                      course?.videoList[course?.videoList?.length - 1]
+                        ?.total_correct_ans
+                  ) {
+                    access = "complete";
+                  } else {
+                    access = true;
+                  }
+                }
+                console.log("access", access);
+
                 return (
                   <Col md="6" lg="3">
                     <Card
@@ -246,6 +327,19 @@ function List({
                         <CardTitle tag="h4">{course?.course_name}</CardTitle>
                         <CardText>
                           <div>
+                            {access == "complete" ? (
+                              <CheckCircle
+                                size={20}
+                                className="me-75"
+                                color="green"
+                              />
+                            ) : access == true ? (
+                              <Unlock size={20} className="me-75" />
+                            ) : access == "playing" ? (
+                              <PlayCircle size={20} className="me-75" />
+                            ) : (
+                              <Lock size={20} className="me-75" />
+                            )}
                             {/* {course?.total_question &&
                             course?.total_correct_ans &&
                             countPassingScore(course?.total_question, 70) <=
