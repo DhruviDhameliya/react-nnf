@@ -87,7 +87,7 @@ const defaultValues = {
 };
 
 const Login = () => {
-  console.log("#################");
+  // console.log("#################");
   // ** Hooks
   const { skin } = useSkin();
   const [loading, setLoading] = useState(false);
@@ -137,10 +137,10 @@ const Login = () => {
       //     ));
       //   })
       //   .catch((err) => console.log(err));
-      console.log("data", data);
+      // console.log("data", data);
       setLoading(true);
       const response = await LoginRequest(data);
-      console.log(response, "response");
+      // console.log(response, "response");
       if (response?.status === 1) {
         await handleLogin(response?.data);
         if (response?.data.type == 0) {
@@ -349,6 +349,7 @@ const Login = () => {
                   Remember Me
                 </Label>
               </div> */}
+              {console.log(loading, "loading")}
               <Button type="submit" color="primary" block disabled={loading}>
                 Sign in
               </Button>

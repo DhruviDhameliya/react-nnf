@@ -6,17 +6,17 @@ import { getOptionsForQuizById } from "../../../@core/api/common_api";
 import { notification } from "../../../@core/constants/notification";
 
 const Question = ({ question, currentQuestion, handleAnswer, ansList }) => {
-  console.log("question", question);
+  // console.log("question", question);
   const [optionsList, setOptionsList] = useState([]);
 
   useEffect(() => {
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     getOptionsList();
   }, [currentQuestion]);
 
   const getOptionsList = async () => {
     let resp = await getOptionsForQuizById(question?.q_id);
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setOptionsList(resp?.data);
     } else {

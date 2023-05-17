@@ -54,12 +54,12 @@ const ProfileUpdate = () => {
   };
 
   const getUserData = () => {
-    console.log("user", user);
+    // console.log("user", user);
     setRegisterData(user);
   };
 
   const onHandleChange = (e, name) => {
-    console.log(e, name, "!!!!!!!!!!");
+    // console.log(e, name, "!!!!!!!!!!");
     setRegisterData((prevState) => ({
       ...prevState,
       [name]: e,
@@ -104,7 +104,7 @@ const ProfileUpdate = () => {
         <TabContent className="py-50" activeTab={active}>
           {active == 1 && (
             <TabPane tabId="1">
-              {console.log("refister", registerData)}
+              {/* {console.log("refister", registerData)} */}
               <PersonalUpdate
                 onHandleChange={onHandleChange}
                 registerData={registerData}

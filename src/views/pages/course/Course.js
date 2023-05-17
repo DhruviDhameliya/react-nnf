@@ -66,15 +66,15 @@ function Course() {
 
   const onSubmit = async (data) => {
     if (Object.keys(errors).length == 0) {
-      console.log("datttt", data, courseData);
+      // console.log("datttt", data, courseData);
       let resp;
-      console.log("v_duration: v_duration,v_img: v_img,", courseData);
+      // console.log("v_duration: v_duration,v_img: v_img,", courseData);
       if (step == 1) {
         resp = await insertCourse(courseData);
       } else {
         resp = await updateCourse(courseData);
       }
-      console.log("resspp", resp);
+      // console.log("resspp", resp);
       if (resp?.status == 1) {
         notification({
           type: "success",
@@ -99,7 +99,7 @@ function Course() {
 
   const getCourseList = async () => {
     let resp = await getCourses();
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setCourseList(resp?.data);
     } else {
@@ -136,7 +136,7 @@ function Course() {
                 onClick={() => {
                   setStep(2);
                   setCourseData(row);
-                  console.log("rowwwww", row);
+                  // console.log("rowwwww", row);
                   const fields = ["course_name"];
                   fields.forEach((field) => setValue(field, row[field]));
                 }}

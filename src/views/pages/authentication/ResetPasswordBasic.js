@@ -54,19 +54,19 @@ const ResetPasswordBasic = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log("data", data);
-    console.log("errorsssssssssssss", errors);
-    console.log(
-      "auth_token: window.location.pathname.split(/).pop(),",
-      window.location.pathname.split("/").pop()
-    );
+    // console.log("data", data);
+    // console.log("errorsssssssssssss", errors);
+    // console.log(
+    //   "auth_token: window.location.pathname.split(/).pop(),",
+    //   window.location.pathname.split("/").pop()
+    // );
     let passwordData = {
       ...data,
       otp: window.location.pathname.split("/").pop(),
     };
     if (Object.keys(errors).length == 0) {
       let resp = await updateNewPassword(passwordData);
-      console.log("resspp", resp);
+      // console.log("resspp", resp);
       if (resp?.status == 1) {
         notification({
           type: "success",

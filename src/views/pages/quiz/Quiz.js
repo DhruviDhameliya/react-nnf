@@ -41,11 +41,10 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
 
   const handleQuizResult = async () => {
     let resp = await getQuizResult(user?.u_id, video?.v_id, step == 2 ? 0 : 1);
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setResult(resp?.data);
       setAttempt(parseInt(resp?.data[0]?.attempt) + 1);
-      
     } else {
       setAttempt(1);
       // notification({
@@ -57,7 +56,7 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
 
   const getQuestionsList = async () => {
     let resp = await getQuestionsForQuiz(video?.v_id);
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setQuestionList(resp?.data);
       setTotalQuestions(resp?.total_question);
@@ -71,7 +70,7 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
   };
 
   const handleAnswer = async (question, answer, i) => {
-    console.log("question, answer, i", question, answer, i);
+    // console.log("question, answer, i", question, answer, i);
     // if (answerList[i]) {
     //   let items = [...answerList];
     //   let item = {
@@ -94,7 +93,7 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
   };
 
   const handlePageChange = async (index) => {
-    console.log(index, "1111111111111111111");
+    // console.log(index, "1111111111111111111");
     setCurrentQuestion(index);
   };
   const handleSubmitQuiz = async () => {
@@ -104,10 +103,10 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
         message: "All Questions are mandatory",
       });
     } else {
-      console.log("answerListttttttttttttttt", answerList);
+      // console.log("answerListttttttttttttttt", answerList);
       // let data = answerList;
       const entries = Object.values(answerList?.ansList);
-      console.log("entries", entries);
+      // console.log("entries", entries);
       let data = {
         ...answerList,
         u_id: user?.u_id,
@@ -117,9 +116,9 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
         attempt: attempt,
         ansList: Object.values(answerList?.ansList),
       };
-      console.log("data", data);
+      // console.log("data", data);
       let resp = await insertQuiz(data);
-      console.log("resspp", resp);
+      // console.log("resspp", resp);
       if (resp?.status == 1) {
         notification({
           type: "success",
@@ -151,10 +150,10 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
           <CardHeader className="flex-md-row flex-column align-md-items-center align-items-center border-bottom">
             <CardTitle tag="h5">Quiz</CardTitle>
           </CardHeader>
-          {console.log(
+          {/* {console.log(
             "questionList[currentQuestion]",
             questionList[currentQuestion]
-          )}
+          )} */}
           <CardBody className="m-1">
             {questionList[currentQuestion] && (
               <Question

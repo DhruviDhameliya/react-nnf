@@ -16,7 +16,7 @@ function Users() {
 
   const getAllUser = async (page, perPage) => {
     let resp = await getAllUsers(page, perPage);
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setUserList(resp?.data);
       setTotalUserData(resp?.total_users);
@@ -31,14 +31,14 @@ function Users() {
   };
 
   const handlePerPage = (newPerPage) => {
-    console.log("new", newPerPage);
+    // console.log("new", newPerPage);
     setRowsPerPage(newPerPage);
     setCurrentPage(1);
     getAllUser(currentPage, newPerPage);
   };
 
   const handlePagination = (page) => {
-    console.log("new", page);
+    // console.log("new", page);
     setCurrentPage(page);
     getAllUser(page, rowsPerPage);
   };

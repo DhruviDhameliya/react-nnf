@@ -14,10 +14,7 @@ import { notification } from "../../../@core/constants/notification";
 import { useState } from "react";
 
 const ExtraUpdate = (props) => {
-  const {
-    onHandleChange,
-    registerData,
-  } = props;
+  const { onHandleChange, registerData } = props;
 
   const [specialtyOptions, setSpecialtyOptions] = useState([]);
   const [workTypeOptions, setWorkTypeOptions] = useState([]);
@@ -93,20 +90,20 @@ const ExtraUpdate = (props) => {
     };
     asyncFetchData();
     Object?.keys(registerData)?.forEach((field) => {
-      console.log("field", field, registerData[field]);
+      // console.log("field", field, registerData[field]);
       setValue(field, registerData[field]);
     });
   }, []);
 
   const onSubmit = async (data) => {
-    console.log("data", data);
-    console.log("errorsssssssssssss", errors);
+    // console.log("data", data);
+    // console.log("errorsssssssssssss", errors);
     // await checkMail(data?.u_email);
     // await checkMobileNumber(data?.mobile);
     // if (Object.values(data).every((field) => field.length > 0)) {
     if (Object.keys(errors).length == 0) {
       let resp = await updateProfile(registerData);
-      console.log("resspp", resp);
+      // console.log("resspp", resp);
       if (resp?.status == 1) {
         notification({
           type: "success",
@@ -142,7 +139,7 @@ const ExtraUpdate = (props) => {
               name="qualification"
               render={({ field }) => (
                 <Input
-                autoFocus
+                  autoFocus
                   id="qualification"
                   name="qualification"
                   placeholder="Enter Qualification"
@@ -188,7 +185,7 @@ const ExtraUpdate = (props) => {
                     specialtyOptions &&
                     specialtyOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.specialty) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       } else if (registerData?.specialty === 0) {
                         return { value: 0, label: "Other" };
@@ -265,7 +262,7 @@ const ExtraUpdate = (props) => {
                     workTypeOptions &&
                     workTypeOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.type_of_work) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       }
                     })
@@ -312,7 +309,7 @@ const ExtraUpdate = (props) => {
                     workAreaOptions &&
                     workAreaOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.area_of_work) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       } else if (registerData?.area_of_work === 0) {
                         return { value: 0, label: "Other" };
@@ -396,7 +393,7 @@ const ExtraUpdate = (props) => {
                     exactWorkAreaOptions &&
                     exactWorkAreaOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.exact_area_of_work) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       } else if (registerData?.exact_area_of_work === 0) {
                         return { value: 0, label: "Any others area" };
@@ -479,7 +476,7 @@ const ExtraUpdate = (props) => {
                     memberOptions &&
                     memberOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.member_of) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       }
                     })

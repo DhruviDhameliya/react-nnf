@@ -11,10 +11,7 @@ import secureLocalStorage from "react-secure-storage";
 import { notification } from "../../../@core/constants/notification";
 
 const PersonalUpdate = (props) => {
-  const {
-    onHandleChange,
-    registerData,
-  } = props;
+  const { onHandleChange, registerData } = props;
   const SignupSchema = yup.object().shape({
     name: yup.string().required("Name is Required"),
     age: yup.string().required("Age is Required"),
@@ -53,20 +50,20 @@ const PersonalUpdate = (props) => {
 
   useEffect(() => {
     Object?.keys(registerData)?.forEach((field) => {
-      console.log("field", field, registerData[field]);
+      // console.log("field", field, registerData[field]);
       setValue(field, registerData[field]);
     });
   }, []);
 
   const onSubmit = async (data) => {
-    console.log("data", data);
-    console.log("errorsssssssssssss", errors);
+    // console.log("data", data);
+    // console.log("errorsssssssssssss", errors);
     // await checkMail(data?.u_email);
     // await checkMobileNumber(data?.mobile);
     // if (Object.values(data).every((field) => field.length > 0)) {
     if (Object.keys(errors).length == 0) {
       let resp = await updateProfile(registerData);
-      console.log("resspp", resp);
+      // console.log("resspp", resp);
       if (resp?.status == 1) {
         notification({
           type: "success",
@@ -171,7 +168,7 @@ const PersonalUpdate = (props) => {
                       name="gender"
                       checked={registerData?.gender == 0}
                       onChange={(e) => {
-                        console.log("e.target.value", e.target?.value);
+                        // console.log("e.target.value", e.target?.value);
                         field.onChange(e.target?.value);
                         onHandleChange(e.target?.value, e.target?.name);
                       }}
@@ -193,7 +190,7 @@ const PersonalUpdate = (props) => {
                       value="1"
                       name="gender"
                       onChange={(e) => {
-                        console.log("e.target.value", e.target?.value);
+                        // console.log("e.target.value", e.target?.value);
                         field.onChange(e.target?.value);
                         onHandleChange(e.target?.value, e.target?.name);
                       }}
@@ -377,13 +374,13 @@ const PersonalUpdate = (props) => {
                     field.onChange(e.target?.value);
                     onHandleChange(e.target?.value, e.target?.name);
                     if (e.target?.value && e.target?.value?.length != 6) {
-                      console.log("ifffff");
+                      // console.log("ifffff");
                       setError("pincode", {
                         type: "custom",
                         message: "PIN Code Must be 6 character long",
                       });
                     } else {
-                      console.log("elseeeeeeeee");
+                      // console.log("elseeeeeeeee");
                       clearErrors("pincode");
                     }
                   }}
