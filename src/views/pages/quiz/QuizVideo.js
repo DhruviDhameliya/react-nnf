@@ -107,15 +107,15 @@ const QuizVideo = (props) => {
   // };
 
   const handleProgress = async (progress) => {
-    console.log("progress: ", progress);
+    // console.log("progress: ", progress);
     const newWatchedPercentage = Math.floor(progress.played * 100);
-    console.log("newWatchedPercentage :", newWatchedPercentage);
+    // console.log("newWatchedPercentage :", newWatchedPercentage);
     setPlayed(progress.played);
     setWatchedPercentage(newWatchedPercentage);
 
     // If video is watched completely, update database with percentage watched
     if (newWatchedPercentage >= 95) {
-      console.log("$$$$$$$$$$$$$$$$$$$");
+      // console.log("$$$$$$$$$$$$$$$$$$$");
       let resp = await updateVideoPercentage({
         v_id: video.v_id,
         percentage: newWatchedPercentage,
@@ -137,7 +137,7 @@ const QuizVideo = (props) => {
 
   const handleVideoEnd = () => {
     // Advance to next video
-    console.log("handleVideoEnd", handleVideoEnd);
+    // console.log("handleVideoEnd", handleVideoEnd);
     // setCurrentVideoIndex(currentVideoIndex + 1);
     // setWatchedPercentage(0);
   };
@@ -184,26 +184,23 @@ const QuizVideo = (props) => {
               <div className="align-middle d-sm-inline-block d-none">Next</div>
             </Button>
           ) : (
-            (console.log("videooo", video),
-            (
-              <Button
-                color="primary"
-                onClick={() => handleChangeStep(4)}
-                disabled={
-                  video?.total_question == null &&
-                  video?.total_correct_ans == null &&
-                  watchedPercentage < 95
-                }
-              >
-                <ArrowRight
-                  size={14}
-                  className="rotate-rtl align-middle ms-sm-50 ms-0"
-                />
-                <div className="align-middle d-sm-inline-block d-none">
-                  Start Quiz
-                </div>
-              </Button>
-            ))
+            <Button
+              color="primary"
+              onClick={() => handleChangeStep(4)}
+              disabled={
+                video?.total_question == null &&
+                video?.total_correct_ans == null &&
+                watchedPercentage < 95
+              }
+            >
+              <ArrowRight
+                size={14}
+                className="rotate-rtl align-middle ms-sm-50 ms-0"
+              />
+              <div className="align-middle d-sm-inline-block d-none">
+                Start Quiz
+              </div>
+            </Button>
           )}
 
           <button

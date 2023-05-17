@@ -107,7 +107,7 @@ const QuizApp = () => {
   };
 
   const handleNext = async (index) => {
-    console.log("|incedx", index, videoList?.length - 1);
+    // console.log("|incedx", index, videoList?.length - 1);
     // if (
     //   currentCourse == courseList?.length - 1 &&
     //   index == videoList?.length - 1
@@ -132,7 +132,7 @@ const QuizApp = () => {
         let pre = await handleQuizResult(videoList[index]?.v_id, 0);
         let post = await handleQuizResult(videoList[index]?.v_id, 1);
         if (Object?.keys(pre)?.length != 0) {
-          console.log("ifffffffffff");
+          // console.log("ifffffffffff");
           await handleChangeStep(3);
         } else if (Object?.keys(post)?.length != 0) {
           await handleChangeStep(5);
@@ -184,7 +184,7 @@ const QuizApp = () => {
 
   const getCourseList = async () => {
     let resp = await getCourseWithVideoData(user?.u_id);
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setCourseList(resp?.data);
     } else {
@@ -200,7 +200,7 @@ const QuizApp = () => {
       user?.u_id,
       courseList[course]?.c_id
     );
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setVideoList(resp?.data);
       return resp?.data;
@@ -214,7 +214,7 @@ const QuizApp = () => {
 
   const handleQuizResult = async (v_id, type) => {
     let resp = await getQuizResult(user?.u_id, v_id, type);
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       if (type == 0) {
         setPreResult(resp?.data[0]);

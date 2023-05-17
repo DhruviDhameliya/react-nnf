@@ -18,7 +18,7 @@ const Certificate = () => {
     // console.log(state, "statyhtyte");
     const newFunction = async () => {
       let resp = await getUserDataById();
-      console.log("resp", resp);
+      // console.log("resp", resp);
 
       if (resp?.certificate_status == 1) {
         const context = myCanvas?.current?.getContext("2d");
@@ -41,21 +41,6 @@ const Certificate = () => {
             395
           );
           setImagePreview(myCanvas?.current?.toDataURL("image/png"));
-          // if (localStorage.getItem("counter") !== "1") {
-          //   if (myCanvas?.current?.toDataURL("image/png")) {
-          //     let downloadLink = document.createElement("a");
-          //     downloadLink.setAttribute("download", "CanvasAsImage.png");
-          //     let canvas1 = myCanvas.current;
-          //     let dataURL = canvas1?.toDataURL("image/png");
-          //     let url = dataURL?.replace(
-          //       /^data:image\/png/,
-          //       "data:application/octet-stream"
-          //     );
-          //     downloadLink.setAttribute("href", url);
-          //     downloadLink.click();
-          //     localStorage.setItem("counter", 1);
-          //   }
-          // }
         });
       }
     };
@@ -107,6 +92,7 @@ const Certificate = () => {
     <Fragment>
       <Card>
         <canvas
+          className="certificate"
           ref={myCanvas}
           width={1100}
           height={631}
@@ -127,7 +113,11 @@ const Certificate = () => {
             style={{ display: "flex", justifyContent: "center" }}
           >
             <div>
-              <img src={imagePreview} alt="Registration Pass" />
+              <img
+                src={imagePreview}
+                alt="Certificate"
+                style={{ maxWidth: "100%", height: "auto" }}
+              />
               <div
                 style={{
                   marginBottom: "5px",
@@ -136,6 +126,7 @@ const Certificate = () => {
                 }}
               >
                 <Button
+                  className="mt-2"
                   type="submit"
                   color="primary"
                   onClick={DownloadCanvasAsImage}

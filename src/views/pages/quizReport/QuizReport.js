@@ -59,7 +59,7 @@ const QuizReport = () => {
     let data = { u_name: val, page: page, perPage: perPage };
 
     let resp = await getQuizReport(data);
-    console.log("resp", resp);
+    // console.log("resp", resp);
     if (resp?.status == 1) {
       setQuizReportData(resp?.data);
       setTotalQuizReportData(resp?.total_user);
@@ -75,7 +75,7 @@ const QuizReport = () => {
 
   const exportData = async () => {
     let resp = await getExcelQuizReport({ u_name: value });
-    console.log("resp", resp);
+    // console.log("resp", resp);
     if (resp?.status == 1) {
       setExcelQuizReportData(resp?.data);
     } else {
@@ -141,14 +141,14 @@ const QuizReport = () => {
   };
 
   const handlePerPage = (newPerPage) => {
-    console.log("new", newPerPage);
+    // console.log("new", newPerPage);
     setRowsPerPage(newPerPage);
     setCurrentPage(1);
     getQuizReportData(value, 1, newPerPage);
   };
 
   const handlePagination = (page) => {
-    console.log("new", page);
+    // console.log("new", page);
     setCurrentPage(page);
     getQuizReportData(value, page, rowsPerPage);
   };
@@ -185,7 +185,7 @@ const QuizReport = () => {
       name: "No.",
       cell: (row, index) =>
         parseInt(currentPage - 1) * parseInt(rowsPerPage) + parseInt(index + 1),
-        width: "70px",
+      width: "70px",
     },
     {
       name: "User name",

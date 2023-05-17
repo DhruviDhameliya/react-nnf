@@ -20,9 +20,9 @@ import {
 } from "reactstrap";
 import {
   getCourses,
-  getVideos,
-  insertVideo,
-  updateVideo,
+  // getVideos,
+  // insertVideo,
+  // updateVideo,
 } from "../../../@core/api/common_api";
 import { notification } from "../../../@core/constants/notification";
 import DataTable from "react-data-table-component";
@@ -30,6 +30,11 @@ import { useEffect } from "react";
 import Select from "react-select";
 import ReactPlayer from "react-player";
 import classnames from "classnames";
+import {
+  getVideos,
+  insertVideo,
+  updateVideo,
+} from "../../../@core/api/service/VideoService";
 
 const defaultValues = {
   v_name: "",
@@ -77,9 +82,9 @@ function Video() {
 
   const onSubmit = async (data) => {
     if (Object.keys(errors).length == 0) {
-      console.log("datttt", data, videoData);
+      // console.log("datttt", data, videoData);
       let resp;
-      console.log("v_duration: v_duration,v_img: v_img,", videoData, v_img);
+      // console.log("v_duration: v_duration,v_img: v_img,", videoData, v_img);
       if (step == 1) {
         resp = await insertVideo({
           ...videoData,
@@ -91,7 +96,7 @@ function Video() {
           v_img: v_img,
         });
       }
-      console.log("resspp", resp);
+      // console.log("resspp", resp);
       if (resp?.status == 1) {
         notification({
           type: "success",
@@ -116,20 +121,20 @@ function Video() {
 
   const getCourseList = async () => {
     let resp = await getCourses();
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setCourseList(resp?.data);
-    // } else {
-    //   notification({
-    //     type: "error",
-    //     message: resp?.message,
-    //   });
+      // } else {
+      //   notification({
+      //     type: "error",
+      //     message: resp?.message,
+      //   });
     }
   };
 
   const getVideoList = async () => {
     let resp = await getVideos();
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setVideoList(resp?.data);
     } else {
@@ -141,7 +146,7 @@ function Video() {
   };
 
   const handleDuration = async (duration) => {
-    console.log("onDuration", duration);
+    // console.log("onDuration", duration);
     setVideoData({ ...videoData, v_duration: duration });
   };
 
@@ -153,7 +158,7 @@ function Video() {
     const videoUrl = player.getInternalPlayer().getVideoUrl();
     const videoId = videoUrl.match(/v=([^&]+)/)[1];
     const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
-    console.log(thumbnailUrl, "thumbnailUrl");
+    // console.log(thumbnailUrl, "thumbnailUrl");
     // setVideoData({
     //   ...videoData,
     //   v_img: `https://img.youtube.com/vi/${videoId}/0.jpg`,
@@ -196,8 +201,8 @@ function Video() {
                 onClick={() => {
                   setStep(2);
                   setVideoData(row);
-                  console.log("rowwwww", row);
-                  const fields = ["v_name", "v_link","c_id"];
+                  // console.log("rowwwww", row);
+                  const fields = ["v_name", "v_link", "c_id"];
                   fields.forEach((field) => setValue(field, row[field]));
                 }}
               />
@@ -290,7 +295,7 @@ function Video() {
                         courseList &&
                         courseList?.map((s) => {
                           if (s?.c_id == videoData?.c_id) {
-                            console.log("s.name ", s?.course_name);
+                            // console.log("s.name ", s?.course_name);
                             return { label: s?.course_name, value: s?.c_id };
                           }
                         })
@@ -362,7 +367,7 @@ function Video() {
                   <FormFeedback>{errors.v_link.message}</FormFeedback>
                 )}
               </div>
-              {console.log(isMobileDevice, "isMobileDevice")}
+              {/* {console.log(isMobileDevice, "isMobileDevice")} */}
               <div
                 className="d-flex mb-1"
                 style={{

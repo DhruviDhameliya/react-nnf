@@ -66,7 +66,7 @@ const RegisterMultiSteps = () => {
   const regExp = /android|iphone/i;
   const isMobileDevice = regExp.test(details);
   const onHandleChange = (e, name) => {
-    console.log(e, name, "!!!!!!!!!!");
+    // console.log(e, name, "!!!!!!!!!!");
     setRegisterData((prevState) => ({
       ...prevState,
       [name]: e,
@@ -74,9 +74,9 @@ const RegisterMultiSteps = () => {
   };
 
   const registrationSubmit = async () => {
-    console.log("registerDataaaaa", registerData);
+    // console.log("registerDataaaaa", registerData);
     let resp = await registerUser(registerData);
-    console.log("resspp", resp);
+    // console.log("resspp", resp);
     if (resp?.status == 1) {
       notification({
         type: "success",
@@ -87,7 +87,7 @@ const RegisterMultiSteps = () => {
       //   ...personalInfoDefaultValue,
       //   ...accountInfoDefaultValue,
       // });
-      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+      // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
       navigate("/login");
     } else {
       notification({

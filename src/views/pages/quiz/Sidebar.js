@@ -65,7 +65,7 @@ const Sidebar = (props) => {
   // };
 
   useEffect(() => {
-    console.log("#######################################");
+    // console.log("#######################################");
   }, [props]);
 
   return (

@@ -22,9 +22,10 @@ import {
 } from "reactstrap";
 import {
   deleteOption,
+  getCourses,
   getOptionsById,
   getQuestions,
-  getVideos,
+  // getVideos,
   insertQuestion,
   insertVideo,
   updateQuestion,
@@ -35,6 +36,10 @@ import DataTable from "react-data-table-component";
 import { useEffect } from "react";
 import { SlideDown } from "react-slidedown";
 import Repeater from "@components/repeater";
+import {
+  getVideos,
+  getVideosByCourse,
+} from "../../../@core/api/service/VideoService";
 
 const defaultValues = {
   question: "",
@@ -47,15 +52,27 @@ function Question() {
   const [options, setOptions] = useState([]);
   const [step, setStep] = useState(0);
   const [questionList, setQuestionList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalQuestions, setTotalQuestions] = useState(0);
   const [videoList, setVideoList] = useState([]);
+  const [courseList, setCourseList] = useState([]);
+  const [courseVideoList, setCourseVideoList] = useState([]);
   const [isQuestionLoading, setIsQuestionLoading] = useState(false);
   const [ans, setAns] = useState(-1);
   const [count, setCount] = useState(2);
+  const [filterData, setFilterData] = useState({});
 
   useEffect(() => {
     getVideoList();
-    getQuestionsList();
+    // getQuestionsList(currentPage, rowsPerPage);
+    getCourseList();
   }, []);
+
+  useEffect(() => {
+    // console.log("!!!!!!!!!!!!!!");
+    getQuestionsList(currentPage, rowsPerPage);
+  }, [filterData]);
 
   const onHandleChange = (e, name) => {
     // console.log("e, name", e, name);
@@ -69,10 +86,8 @@ function Question() {
     e?.preventDefault();
     // console.log("daattttttttttttt", data);
     // if (Object.keys(errors).length == 0) {
-    console.log(
-      "questionData?.options?.length < 2",
-      questionData?.options?.length
-    );
+    // console.log("ans111111", ans);
+    // console.log("x", questionData?.options?.length);
     if (ans == -1) {
       notification({
         type: "error",
@@ -84,8 +99,8 @@ function Question() {
         message: "Please enter at least 2 Options",
       });
     } else {
-      console.log("datttt", questionData?.options);
-      console.log("ans", ans);
+      // console.log("datttt", questionData?.options);
+      // console.log("ans", ans);
       if (questionData?.options[ans]) {
         questionData.options[ans].ans = 1;
       }
@@ -101,25 +116,32 @@ function Question() {
       questionData.options = questionData?.options?.filter(
         (o) => o != undefined || o != null
       );
-      console.log("question ", questionData);
-      let resp;
-      if (step == 1) {
-        resp = await insertQuestion(questionData);
-      } else {
-        resp = await updateQuestion(questionData);
-      }
-      console.log("resspp", resp);
-      if (resp?.status == 1) {
-        notification({
-          type: "success",
-          message: resp?.message,
-        });
-        handleReset();
-      } else {
+      // console.log("question ", questionData);
+      if (questionData?.options?.length < 2) {
         notification({
           type: "error",
-          message: resp?.message,
+          message: "Please enter at least 2 Options",
         });
+      } else {
+        let resp;
+        if (step == 1) {
+          resp = await insertQuestion(questionData);
+        } else {
+          resp = await updateQuestion(questionData);
+        }
+        // console.log("resspp", resp);
+        if (resp?.status == 1) {
+          notification({
+            type: "success",
+            message: resp?.message,
+          });
+          handleReset();
+        } else {
+          notification({
+            type: "error",
+            message: resp?.message,
+          });
+        }
       }
     }
     // }
@@ -128,12 +150,14 @@ function Question() {
   const handleReset = () => {
     setQuestionData(defaultValues);
     setStep(0);
-    getQuestionsList();
+    getQuestionsList(currentPage, rowsPerPage);
+    setCount(2);
+    setAns(-1);
   };
 
   const getVideoList = async () => {
     let resp = await getVideos();
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
       setVideoList(resp?.data);
     } else {
@@ -141,26 +165,70 @@ function Question() {
         type: "error",
         message: resp?.message,
       });
+      setVideoList([]);
     }
   };
 
-  const getQuestionsList = async () => {
-    let resp = await getQuestions();
-    console.log(resp);
+  const getVideoListByCourse = async (c_id) => {
+    let resp = await getVideosByCourse(c_id);
+    // console.log(resp);
+    if (resp?.status == 1) {
+      setCourseVideoList(resp?.data);
+    } else {
+      setCourseVideoList([]);
+    }
+  };
+
+  const getCourseList = async () => {
+    let resp = await getCourses();
+    // console.log(resp);
+    if (resp?.status == 1) {
+      setCourseList(resp?.data);
+    } else {
+      setCourseList([]);
+    }
+  };
+
+  // const handleFilterQuestionData = async()=>{
+  //   let formData = {...filterData}
+  //   let resp = await getQuestions(formData);
+  //   console.log(resp);
+  //   if (resp?.status == 1) {
+  //     setCourseList(resp?.data);
+  //   } else {
+  //     setCourseList([]);
+  //   }
+  // }
+
+  const handleFilterClear = async () => {
+    setFilterData({
+      c_id: 0,
+      v_id: 0,
+    });
+  };
+
+  const getQuestionsList = async (page, perPage) => {
+    let formData = {};
+    formData = { ...filterData, page: page, perPage: perPage };
+    let resp = await getQuestions(formData);
+    // console.log(resp);
     if (resp?.status == 1) {
       setQuestionList(resp?.data);
+      setTotalQuestions(resp?.t_rows);
     } else {
       notification({
         type: "error",
         message: resp?.message,
       });
+      setQuestionList([]);
+      setTotalQuestions(0);
     }
   };
   const getOptionsList = async (id) => {
     let resp = await getOptionsById(id);
-    console.log(resp);
+    // console.log(resp);
     if (resp?.status == 1) {
-      console.log("questionData");
+      // console.log("questionData");
       // setQuestionData({ ...questionData, options: resp?.data });
 
       // setOptions(resp?.data);
@@ -175,14 +243,14 @@ function Question() {
 
   const deleteForm = async (e, index) => {
     e.preventDefault();
-    console.log(
-      "questionData?.options[index]?.o_id",
-      questionData?.options[index]?.o_id
-    );
+    // console.log(
+    //   "questionData?.options[index]?.o_id",
+    //   questionData?.options[index]?.o_id
+    // );
     if (step == 2 && questionData?.options[index]?.o_id) {
       let id = questionData?.options[index]?.o_id;
       let resp = await deleteOption(id);
-      console.log("resp", resp);
+      // console.log("resp", resp);
       if (resp?.status == 1) {
         const slideDownWrapper = e.target.closest(".react-slidedown"),
           form = e.target.closest("form");
@@ -190,7 +258,9 @@ function Question() {
           .closest("form")
           .querySelector("input")
           .getAttribute("id");
-        if (ans && ans == key) {
+        // console.log("anssss", ans);
+        if (ans != -1 && ans == key) {
+          // console.log("iffans", ans);
           setAns(-1);
         }
         delete questionData?.options[key];
@@ -212,6 +282,7 @@ function Question() {
         .closest("form")
         .querySelector("input")
         .getAttribute("id");
+      // console.log("ans", ans);
       if (ans && ans == key) {
         setAns(-1);
       }
@@ -226,6 +297,19 @@ function Question() {
 
   const increaseCount = () => {
     setCount(count + 1);
+  };
+
+  const handlePerPage = (newPerPage) => {
+    // console.log("new", newPerPage);
+    setRowsPerPage(newPerPage);
+    setCurrentPage(1);
+    getQuestionsList(currentPage, newPerPage);
+  };
+
+  const handlePagination = (page) => {
+    // console.log("new", page);
+    setCurrentPage(page);
+    getQuestionsList(page, rowsPerPage);
   };
 
   const column = [
@@ -266,15 +350,18 @@ function Question() {
                   // fields.forEach((field) => setValue(field, row[field]));
                   // setCount(row?.option_name?.split(",")?.length);
                   let options = await getOptionsList(row?.q_id);
-                  console.log(
-                    "op",
-                    options,
-                    options?.findIndex((o) => o?.ans == 1)
-                  );
+                  // console.log(
+                  //   "op",
+                  //   options,
+                  //   options?.findIndex((o) => o?.ans == 1)
+                  // );
                   setCount(options?.length);
                   let index = options?.findIndex((o) => o?.ans == 1);
+                  // console.log("index1", index);
                   setAns(index);
-                  options[index].ans = 0;
+                  if (index != -1) {
+                    options[index].ans = 0;
+                  }
                   setQuestionData({ ...row, options: options });
                 }}
               />
@@ -322,6 +409,73 @@ function Question() {
                 Add Questions
               </Button>
             </div>
+            <Row className="d-flex justify-content-end">
+              <Col md="4" sm="4" className="mb-1">
+                <Select
+                  id="c_id"
+                  name="c_id"
+                  options={
+                    courseList &&
+                    courseList?.map((s) => {
+                      return { value: s?.c_id, label: s?.course_name };
+                    })
+                  }
+                  classNamePrefix="select"
+                  className="react-select"
+                  value={
+                    courseList &&
+                    courseList?.map((s) => {
+                      if (s?.c_id == filterData?.c_id) {
+                        // console.log("s.name ", s?.course_name);
+                        return { label: s?.course_name, value: s?.c_id };
+                      }
+                    })
+                  }
+                  onChange={(e) => {
+                    setFilterData({ ...filterData, c_id: e?.value, v_id: 0 });
+                    getVideoListByCourse(e?.value);
+                  }}
+                />
+              </Col>
+              <Col md="4" sm="4" className="mb-1">
+                <Select
+                  id="v_id"
+                  name="v_id"
+                  options={
+                    courseVideoList &&
+                    courseVideoList?.map((s) => {
+                      return { value: s?.v_id, label: s?.v_name };
+                    })
+                  }
+                  isDisabled={courseVideoList && courseVideoList?.length <= 0}
+                  classNamePrefix="select"
+                  className="react-select"
+                  value={
+                    courseVideoList &&
+                    courseVideoList?.map((s) => {
+                      if (s?.v_id == filterData?.v_id) {
+                        // console.log("s.name ", s?.v_name);
+                        return { label: s?.v_name, value: s?.v_id };
+                      } else return null;
+                    })
+                  }
+                  onChange={(e) => {
+                    setFilterData({ ...filterData, v_id: e?.value });
+                    // handleFilterQuestionData()
+                  }}
+                />
+              </Col>
+              <Col md="2" sm="2" className="mb-1">
+                <Button
+                  className=" clearBtn"
+                  color="dark"
+                  onClick={handleFilterClear}
+                >
+                  Clear
+                </Button>
+              </Col>
+            </Row>
+
             {isQuestionLoading ? (
               <div style={{ height: "100px" }}>
                 <ComponentSpinner />
@@ -329,19 +483,25 @@ function Question() {
             ) : (
               <div className="react-dataTable">
                 <DataTable
-                  noHeader
-                  pagination
+                  // noHeader
+                  title="Questions List"
                   columns={column}
+                  data={questionList}
+                  expandableRows
+                  expandableRowsComponent={ExpandableRow}
                   // paginationPerPage={10}
                   // className="react-dataTable"
                   // sortIcon={<ChevronDown size={10} />}
                   // paginationDefaultPage={currentPage + 1}
                   // paginationComponent={CustomPagination}
-                  data={questionList}
-                  expandableRows
-                  expandableRowsComponent={ExpandableRow}
                   // selectableRowsComponent={BootstrapCheckbox}
                   className="react-dataTable"
+                  pagination
+                  paginationServer
+                  paginationTotalRows={totalQuestions}
+                  onChangeRowsPerPage={handlePerPage}
+                  onChangePage={handlePagination}
+                  paginationDefaultPage={currentPage}
                 />
               </div>
             )}
@@ -355,7 +515,7 @@ function Question() {
             </CardTitle>
           </CardHeader>
           <CardBody>
-            {console.log("sdsdfsdf", questionData)}
+            {/* {console.log("sdsdfsdf", questionData)} */}
             <Form onSubmit={onSubmit}>
               <div className="mb-1">
                 <Label className="form-label" for="question">
@@ -391,7 +551,7 @@ function Question() {
                     videoList &&
                     videoList?.map((s) => {
                       if (s?.v_id == questionData?.v_id) {
-                        console.log("s.name ", s?.v_name);
+                        // console.log("s.name ", s?.v_name);
                         return { label: s?.v_name, value: s?.v_id };
                       } else return null;
                     })
@@ -433,10 +593,10 @@ function Question() {
                                     //     ans: 0,
                                     //   },
                                     // });
-                                    console.log(
-                                      "e.target?.value",
-                                      e.target?.value
-                                    );
+                                    // console.log(
+                                    //   "e.target?.value",
+                                    //   e.target?.value
+                                    // );
                                     questionData.options[i] = {
                                       ...questionData?.options[i],
                                       name: e.target?.value,
@@ -448,7 +608,7 @@ function Question() {
                                         name: e.target?.value,
                                       };
                                       items[i] = item;
-                                      console.log("item", item, items);
+                                      // console.log("item", item, items);
                                       setQuestionData({
                                         ...questionData,
                                         options: items,
@@ -462,10 +622,10 @@ function Question() {
                                         ],
                                       });
                                     }
-                                    console.log(
-                                      "questionData",
-                                      questionData?.options
-                                    );
+                                    // console.log(
+                                    //   "questionData",
+                                    //   questionData?.options
+                                    // );
                                   }}
                                 />
                               </Col>

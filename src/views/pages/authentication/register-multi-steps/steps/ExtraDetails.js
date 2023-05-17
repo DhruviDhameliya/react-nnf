@@ -42,7 +42,7 @@ const ExtraDetails = ({
   registrationSubmit,
   // defaultValues,
 }) => {
-  console.log("defaultValues", defaultValues);
+  // console.log("defaultValues", defaultValues);
   const [specialtyOptions, setSpecialtyOptions] = useState([]);
   const [workTypeOptions, setWorkTypeOptions] = useState([]);
   const [workAreaOptions, setWorkAreaOptions] = useState([]);
@@ -123,7 +123,7 @@ const ExtraDetails = ({
   });
 
   const onSubmit = (data) => {
-    console.log("dataaaa", data);
+    // console.log("dataaaa", data);
     if (Object.keys(errors)?.length == 0) {
       registrationSubmit();
     }
@@ -192,7 +192,7 @@ const ExtraDetails = ({
                     specialtyOptions &&
                     specialtyOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.specialty) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       } else if (registerData?.specialty === 0) {
                         return { value: 0, label: "Other" };
@@ -269,7 +269,7 @@ const ExtraDetails = ({
                     workTypeOptions &&
                     workTypeOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.type_of_work) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       }
                     })
@@ -316,7 +316,7 @@ const ExtraDetails = ({
                     workAreaOptions &&
                     workAreaOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.area_of_work) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       } else if (registerData?.area_of_work === 0) {
                         return { value: 0, label: "Other" };
@@ -400,7 +400,7 @@ const ExtraDetails = ({
                     exactWorkAreaOptions &&
                     exactWorkAreaOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.exact_area_of_work) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       } else if (registerData?.exact_area_of_work === 0) {
                         return { value: 0, label: "Any others area" };
@@ -483,7 +483,7 @@ const ExtraDetails = ({
                     memberOptions &&
                     memberOptions?.map((s) => {
                       if (s?.attribute_id == registerData?.member_of) {
-                        console.log("s.name ", s?.name);
+                        // console.log("s.name ", s?.name);
                         return { label: s?.name, value: s?.attribute_id };
                       }
                     })

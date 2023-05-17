@@ -75,7 +75,7 @@ const PersonalInfo = ({
 
   const checkMail = async (mail) => {
     let resp = await checkEmail({ u_email: mail });
-    console.log("resp", resp);
+    // console.log("resp", resp);
     if (resp?.status === 1) {
       clearErrors("u_email");
     } else {
@@ -88,7 +88,7 @@ const PersonalInfo = ({
 
   const checkMobileNumber = async (mail) => {
     let resp = await checkMobile({ mobile: mail });
-    console.log("resp", resp);
+    // console.log("resp", resp);
     if (resp?.status === 1) {
       clearErrors("mobile");
     } else {
@@ -100,8 +100,8 @@ const PersonalInfo = ({
   };
 
   const onSubmit = async (data) => {
-    console.log("data", data);
-    console.log("errorsssssssssssss", errors);
+    // console.log("data", data);
+    // console.log("errorsssssssssssss", errors);
     await checkMail(data?.u_email);
     await checkMobileNumber(data?.mobile);
     // if (Object.values(data).every((field) => field.length > 0)) {
@@ -212,7 +212,7 @@ const PersonalInfo = ({
                       value="0"
                       name="gender"
                       onChange={(e) => {
-                        console.log("e.target.value", e.target?.value);
+                        // console.log("e.target.value", e.target?.value);
                         field.onChange(e.target?.value);
                         onHandleChange(e.target?.value, e.target?.name);
                       }}
@@ -233,7 +233,7 @@ const PersonalInfo = ({
                       value="1"
                       name="gender"
                       onChange={(e) => {
-                        console.log("e.target.value", e.target?.value);
+                        // console.log("e.target.value", e.target?.value);
                         field.onChange(e.target?.value);
                         onHandleChange(e.target?.value, e.target?.name);
                       }}
@@ -322,12 +322,19 @@ const PersonalInfo = ({
                   id="no_of_children"
                   name="no_of_children"
                   type="number"
+                  pattern="[0-9]*"
+                  inputProps={{ inputMode: "numeric" }}
                   invalid={errors?.no_of_children && true}
                   {...field}
                   placeholder="Enter no of children"
                   onChange={(e) => {
-                    field.onChange(e.target?.value);
-                    onHandleChange(e.target?.value, e.target?.name);
+                    field.onChange(
+                      e.target.value.replace(/[^0-9]/g, "").toString()
+                    );
+                    onHandleChange(
+                      e.target.value.replace(/[^0-9]/g, "").toString(),
+                      e.target?.name
+                    );
                   }}
                 />
               )}
@@ -415,13 +422,13 @@ const PersonalInfo = ({
                     field.onChange(e.target?.value);
                     onHandleChange(e.target?.value, e.target?.name);
                     if (e.target?.value && e.target?.value?.length != 6) {
-                      console.log("ifffff");
+                      // console.log("ifffff");
                       setError("pincode", {
                         type: "custom",
                         message: "PIN Code Must be 6 character long",
                       });
                     } else {
-                      console.log("elseeeeeeeee");
+                      // console.log("elseeeeeeeee");
                       clearErrors("pincode");
                     }
                   }}
@@ -456,14 +463,16 @@ const PersonalInfo = ({
                   onBlur={(e) => {
                     field.onChange(e.target?.value);
                     onHandleChange(e.target?.value, e.target?.name);
-                    if (e.target?.value && e.target?.value?.length != 10) {
+                    if (e.target?.value && e.target?.value?.length == 10) {
+                      console.log("else");
+                      checkMobileNumber(e.target?.value);
+                      // clearErrors("mobile");
+                    } else {
+                      console.log("ifff");
                       setError("mobile", {
                         type: "custom",
                         message: "Mobile Number Must be 10 character long",
                       });
-                    } else {
-                      checkMobileNumber(e.target?.value);
-                      clearErrors("mobile");
                     }
                   }}
                 />
@@ -495,9 +504,11 @@ const PersonalInfo = ({
                     onHandleChange(e.target?.value, e.target?.name);
                   }}
                   onBlur={(e) => {
-                    field.onChange(e.target?.value);
-                    onHandleChange(e.target?.value, e.target?.name);
-                    checkMail(e.target?.value);
+                    if (e.target?.value != "") {
+                      field.onChange(e.target?.value);
+                      onHandleChange(e.target?.value, e.target?.name);
+                      checkMail(e.target?.value);
+                    }
                   }}
                 />
               )}

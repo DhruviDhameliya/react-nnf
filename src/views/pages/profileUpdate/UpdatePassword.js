@@ -43,15 +43,15 @@ const PersonalUpdate = (props) => {
   });
 
   const onSubmit = async (data) => {
-    console.log("data", data);
-    console.log("errorsssssssssssss", errors);
+    // console.log("data", data);
+    // console.log("errorsssssssssssss", errors);
     // await checkMail(data?.u_email);
     // await checkMobileNumber(data?.mobile);
     // if (Object.values(data).every((field) => field.length > 0)) {
     let passwordData = { ...data, u_id: registerData?.u_id };
     if (Object.keys(errors).length == 0) {
       let resp = await updatePassword(passwordData);
-      console.log("resspp", resp);
+      // console.log("resspp", resp);
       if (resp?.status == 1) {
         notification({
           type: "success",

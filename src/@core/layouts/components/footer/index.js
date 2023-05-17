@@ -7,7 +7,7 @@ const Footer = () => {
       <span className="float-md-start d-block d-md-inline-block mt-25">
         Developed By{" "}
         <a
-          href="https://www.nnfgujarat.com/index.php"
+          href="https://www.truelinesolution.com/"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -18,7 +18,7 @@ const Footer = () => {
       <span className="float-md-end d-none d-md-block">
         COPYRIGHT © {new Date().getFullYear()}{" "}
         <a
-          href="https://1.envato.market/pixinvent_portfolio"
+          href="https://www.nnfgujarat.com/index.php"
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -40,13 +40,13 @@ const QuizResult = ({
     handleQuizResult(video?.v_id, 0);
     handleQuizResult(video?.v_id, 1);
 
-    console.log(
-      "|videoList?.length - 1 === currentVideo",
-      videoList?.length,
-      currentVideo
-    );
+    // console.log(
+    //   "|videoList?.length - 1 === currentVideo",
+    //   videoList?.length,
+    //   currentVideo
+    // );
     if (videoList?.length - 1 === currentVideo) {
-      console.log("₹₹₹₹₹₹₹₹₹₹₹₹", postResult);
+      // console.log("₹₹₹₹₹₹₹₹₹₹₹₹", postResult);
       if (
         countPassingScore(postResult?.total_question, 70) <=
         postResult?.total_correct_ans
@@ -60,27 +60,27 @@ const QuizResult = ({
   }, []);
 
   useEffect(() => {
-    console.log(
-      "|videoList?.length - 1 === currentVideo",
-      videoList?.length,
-      currentVideo
-    );
+    // console.log(
+    //   "|videoList?.length - 1 === currentVideo",
+    //   videoList?.length,
+    //   currentVideo
+    // );
     if (
       videoList?.length - 1 === currentVideo &&
       currentCourse == courseList?.length - 1
     ) {
-      console.log("₹₹₹₹₹₹₹₹₹₹₹₹", postResult);
+      // console.log("₹₹₹₹₹₹₹₹₹₹₹₹", postResult);
       if (
         countPassingScore(postResult?.total_question, 70) <=
         postResult?.total_correct_ans
       ) {
         updateCertificateStatus(user?.u_id);
-        console.log("₹₹₹₹₹₹₹₹₹₹₹₹############");
+        // console.log("₹₹₹₹₹₹₹₹₹₹₹₹############");
       }
     }
   }, [postResult]);
 
-  console.log("%%%%%%%%%%%", postResult);
+  // console.log("%%%%%%%%%%%", postResult);
 
   // const handleQuizResult = async (type) => {
   //   let resp = await getQuizResult(user?.u_id, video?.v_id, type);
@@ -106,12 +106,12 @@ const QuizResult = ({
             <CardTitle tag="h5">Pre Quiz Result</CardTitle>
           </CardHeader>
           <CardBody className="m-1">
-            {console.log(
+            {/* {console.log(
               "countPassingScore(preResult?.total_question, 70)",
               countPassingScore(preResult?.total_question, 70),
               countPassingScore(preResult?.total_question, 70) <=
                 preResult?.total_correct_ans
-            )}
+            )} */}
             <div className="m-1" align="center">
               {
                 // Math.ceil((parseInt(preResult?.total_question) * 70) / 100)
@@ -150,12 +150,12 @@ const QuizResult = ({
             <CardTitle tag="h5">Post Quiz Result</CardTitle>
           </CardHeader>
           <CardBody className="m-1">
-            {console.log(
+            {/* {console.log(
               "countPassingScore(postResult?.total_question, 70)",
               countPassingScore(postResult?.total_question, 70),
               countPassingScore(postResult?.total_question, 70) <=
                 postResult?.total_correct_ans
-            )}
+            )} */}
             <div className="m-1" align="center">
               {
                 // Math.ceil((parseInt(preResult?.total_question) * 70) / 100)
@@ -212,7 +212,7 @@ const QuizResult = ({
                   postResult?.total_correct_ans
                 }
                 onClick={() => {
-                  console.log("currentVideo", currentVideo);
+                  // console.log("currentVideo", currentVideo);
                   handleNext(currentVideo + 1);
                 }}
               >
