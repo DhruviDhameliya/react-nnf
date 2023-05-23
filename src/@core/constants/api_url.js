@@ -1,5 +1,6 @@
 export const ApiRoutes = {
-  API_HOSTNAME: "http://192.168.1.18:8000",
+  API_HOSTNAME: "http://192.168.1.18:8005",
+  // API_HOSTNAME: "http://165.232.185.216:8005/",
   LOGIN: "login",
   CHECKEMAIL: "check-email",
   CHECKMOBILE: "check-mobile",

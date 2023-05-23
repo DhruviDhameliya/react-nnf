@@ -110,7 +110,7 @@ const ExtraDetails = ({
           ? schema.required("KMC Work Area is Required")
           : schema
       ),
-    kmc_to_children: yup.string("KMC to Children is Required").required(),
+    kmc_to_children: yup.string().required("KMC to Children is Required"),
   });
 
   const {
@@ -611,7 +611,18 @@ const ExtraDetails = ({
                 </div>
               )}
             />
-            {errors?.kmc && <FormFeedback>{errors?.kmc?.message}</FormFeedback>}
+            {errors?.kmc && (
+              <div
+                style={{
+                  width: "100%",
+                  fontSize: "0.857rem",
+                  color: "#ea5455",
+                  marginTop: "0.25rem",
+                }}
+              >
+                {errors?.kmc?.message}
+              </div>
+            )}
           </Col>
 
           <Col md="6" className="mb-1">
@@ -668,7 +679,16 @@ const ExtraDetails = ({
               )}
             />
             {errors?.kmc_work_area && (
-              <FormFeedback>{errors?.kmc_work_area?.message}</FormFeedback>
+              <div
+                style={{
+                  width: "100%",
+                  fontSize: "0.857rem",
+                  color: "#ea5455",
+                  marginTop: "0.25rem",
+                }}
+              >
+                {errors?.kmc_work_area?.message}
+              </div>
             )}
           </Col>
 
@@ -781,7 +801,16 @@ const ExtraDetails = ({
               )}
             />
             {errors?.kmc_to_children && (
-              <FormFeedback>{errors?.kmc_to_children?.message}</FormFeedback>
+              <div
+                style={{
+                  width: "100%",
+                  fontSize: "0.857rem",
+                  color: "#ea5455",
+                  marginTop: "0.25rem",
+                }}
+              >
+                {errors?.kmc_to_children?.message}
+              </div>
             )}
           </Col>
         </Row>

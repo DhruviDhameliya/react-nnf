@@ -114,11 +114,14 @@ const QuizApp = () => {
     // ) {
     //   navigate("/certificate");
     // } else {
+    console.log("@@@@@@@@@@@@", index, videoList[index - 1]);
     if (
       index == 0 ||
       (index != 0 &&
-        countPassingScore(videoList[index - 1]?.total_question, 70) <=
-          videoList[index - 1]?.total_correct_ans)
+        (countPassingScore(videoList[index - 1]?.total_question, 70) <=
+          videoList[index - 1]?.total_correct_ans ||
+          (videoList[index - 1]?.total == 0 &&
+            videoList[index - 1]?.percentage > 95)))
     ) {
       if (index == videoList?.length) {
         if (currentCourse == courseList?.length - 1) {
@@ -128,18 +131,27 @@ const QuizApp = () => {
           getCourseList();
         }
       } else {
-        await handleChangeVideo(index);
-        let pre = await handleQuizResult(videoList[index]?.v_id, 0);
-        let post = await handleQuizResult(videoList[index]?.v_id, 1);
-        if (Object?.keys(pre)?.length != 0) {
-          // console.log("ifffffffffff");
-          await handleChangeStep(3);
-        } else if (Object?.keys(post)?.length != 0) {
-          await handleChangeStep(5);
-        } else if (index == 0) {
-          await handleChangeStep(1);
+        handleChangeVideo(index);
+
+        if (videoList[index]?.total == 0) {
+          if (videoList[index]?.percentage > 95) {
+            handleChangeStep(3);
+          } else {
+            handleChangeStep(1);
+          }
         } else {
-          handleChangeStep(2);
+          let pre = await handleQuizResult(videoList[index]?.v_id, 0);
+          let post = await handleQuizResult(videoList[index]?.v_id, 1);
+          if (Object?.keys(pre)?.length != 0) {
+            // console.log("ifffffffffff");
+            await handleChangeStep(3);
+          } else if (Object?.keys(post)?.length != 0) {
+            await handleChangeStep(5);
+          } else if (index == 0) {
+            await handleChangeStep(1);
+          } else {
+            handleChangeStep(2);
+          }
         }
       }
       // }
@@ -196,6 +208,7 @@ const QuizApp = () => {
   };
 
   const getVideoList = async (course) => {
+    console.log("course",course);
     let resp = await getVideosWithPercentage(
       user?.u_id,
       courseList[course]?.c_id
@@ -325,11 +338,13 @@ const QuizApp = () => {
                     video={videoList[currentVideo]}
                     videoList={videoList}
                     currentVideo={currentVideo}
+                    currentCourse={currentCourse}
                     handleChangeVideo={handleChangeVideo}
                     handleChangeStep={handleChangeStep}
                     setSidebarOpen={setSidebarOpen}
                     handleQuizResult={handleQuizResult}
                     handleNext={handleNext}
+                    getVideoList={getVideoList}
 
                     // changeVideo={changeVideo}
                   />

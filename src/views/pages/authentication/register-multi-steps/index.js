@@ -137,13 +137,13 @@ const RegisterMultiSteps = () => {
     <div className="auth-wrapper auth-cover">
       <Row className="auth-inner m-0">
         {isMobileDevice && (
-          <Link className="brand-logo" to="/">
-            <img
-              src={themeConfig.app.registrationLogoImage}
-              width="325px"
-              alt="logo"
-            />
-            {/* <svg viewBox="0 0 139 95" version="1.1" height="28">
+        <div className="brand-logo">
+          <img
+            src={themeConfig.app.registrationLogoImage}
+            width="325px"
+            alt="logo"
+          />
+          {/* <svg viewBox="0 0 139 95" version="1.1" height="28">
             <defs>
               <linearGradient
                 x1="100%"
@@ -210,10 +210,10 @@ const RegisterMultiSteps = () => {
             </g>
           </svg>
           <h2 className="brand-text text-primary ms-1">Vuexy</h2> */}
-          </Link>
-        )}
+        </div>
+        )} 
 
-        <Col lg="3" className="d-none d-lg-flex align-items-center p-0">
+        <Col lg="3" className="d-none d-lg-flex align-items-center p-0 mt-2">
           <div className="w-100 d-lg-flex align-items-center justify-content-center">
             <img
               // className="img-fluid w-100"

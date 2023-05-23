@@ -787,7 +787,7 @@ const ExtraUpdate = (props) => {
         </Row>
         <Row></Row>
         <div className="d-flex justify-content-between mt-2">
-          <Button type="submit" color="success" className="btn-next">
+          <Button type="submit" color="primary" className="btn-next">
             Submit
           </Button>
         </div>
