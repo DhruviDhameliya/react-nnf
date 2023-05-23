@@ -121,10 +121,11 @@ const Sidebar = (props) => {
                         ) : (
                           <Lock size={20} className="me-75" />
                         )} */}
-                        {v_data?.total_question &&
-                        v_data?.total_correct_ans &&
-                        countPassingScore(v_data?.total_question, 70) <=
-                          v_data?.total_correct_ans ? (
+                        {(v_data?.total_question &&
+                          v_data?.total_correct_ans &&
+                          countPassingScore(v_data?.total_question, 70) <=
+                            v_data?.total_correct_ans) ||
+                        (v_data?.total == 0 && v_data?.percentage > 95) ? (
                           <CheckCircle
                             size={20}
                             className="me-75"
@@ -135,10 +136,12 @@ const Sidebar = (props) => {
                           <PlayCircle size={20} className="me-75" />
                         ) : index == 0 ||
                           (index != 0 &&
-                            countPassingScore(
+                            (countPassingScore(
                               videoList[index - 1]?.total_question,
                               70
-                            ) <= videoList[index - 1]?.total_correct_ans) ? (
+                            ) <= videoList[index - 1]?.total_correct_ans ||
+                              (videoList[index - 1]?.total == 0 &&
+                                videoList[index - 1]?.percentage > 95))) ? (
                           <Unlock size={20} className="me-75" />
                         ) : (
                           <Lock size={20} className="me-75" />

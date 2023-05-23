@@ -13,18 +13,17 @@ import {
 
 const Instruction = (props) => {
   // ** Props
-  const {
-    setSidebarOpen,
-    video,
-    videoList,
-    handleChangeStep,
-  } = props;
+  const { setSidebarOpen, video, videoList, handleChangeStep } = props;
 
   const [conformation, setConformation] = useState(false);
 
   const startQuiz = () => {
     if (conformation == true) {
-      handleChangeStep(2);
+      if (video?.total == 0) {
+        handleChangeStep(3);
+      } else {
+        handleChangeStep(2);
+      }
     }
   };
 
@@ -99,7 +98,10 @@ const Instruction = (props) => {
                   type="checkbox"
                   id="conformation"
                   name="conformation"
-                  onChange={(e) => {console.log("e.target.checked",e.target.checked); setConformation(e.target.checked)}}
+                  onChange={(e) => {
+                    console.log("e.target.checked", e.target.checked);
+                    setConformation(e.target.checked);
+                  }}
                 />
 
                 <Label for="conformation" className="form-check-label">
@@ -140,7 +142,7 @@ const Instruction = (props) => {
                 onClick={startQuiz}
                 disabled={conformation != true}
               >
-                Start Quiz
+                {video?.total == 0 ? "Start Video" : "Start Quiz"}
               </Button>
             </div>
           </CardBody>

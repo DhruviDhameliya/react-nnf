@@ -33,6 +33,7 @@ import {
   getVideosWithPercentage,
   updateVideoPercentage,
 } from "../../../@core/api/common_api";
+import { notification } from "../../../@core/constants/notification";
 
 function List({
   getVideoList,
@@ -62,38 +63,38 @@ function List({
   //   disableClick: true, // disable click event
   // };
 
-  const changeVideo = async (video, index) => {
-    if (
-      index == 0 ||
-      (index != 0 &&
-        countPassingScore(videoList[index - 1]?.total_question, 70) <=
-          videoList[index - 1]?.total_correct_ans)
-    ) {
-      if (index == 0 && video?.percentage == null) {
-        let resp = await updateVideoPercentage({
-          v_id: video.v_id,
-          percentage: 0,
-          u_id: user?.u_id,
-        });
-      }
-      console.log(preResult, "preResulfggggggggggggd");
-      await handleChangeVideo(index);
-      let pre = await handleQuizResult(video?.v_id, 0);
-      let post = await handleQuizResult(video?.v_id, 1);
-      console.log(preResult, pre, "preResultttttttttttttttttttttttt");
-      if (Object?.keys(pre)?.length != 0) {
-        console.log("ifffffffffff");
-        await handleChangeStep(3);
-      } else if (Object?.keys(post)?.length != 0) {
-        console.log("elseeeeeeeeeeeeeee");
-        await handleChangeStep(5);
-      } else if (index == 0) {
-        await handleChangeStep(1);
-      } else {
-        handleChangeStep(2);
-      }
-    }
-  };
+  // const changeVideo = async (video, index) => {
+  //   if (
+  //     index == 0 ||
+  //     (index != 0 &&
+  //       countPassingScore(videoList[index - 1]?.total_question, 70) <=
+  //         videoList[index - 1]?.total_correct_ans)
+  //   ) {
+  //     if (index == 0 && video?.percentage == null) {
+  //       let resp = await updateVideoPercentage({
+  //         v_id: video.v_id,
+  //         percentage: 0,
+  //         u_id: user?.u_id,
+  //       });
+  //     }
+  //     console.log(preResult, "preResulfggggggggggggd");
+  //     await handleChangeVideo(index);
+  //     let pre = await handleQuizResult(video?.v_id, 0);
+  //     let post = await handleQuizResult(video?.v_id, 1);
+  //     console.log(preResult, pre, "preResultttttttttttttttttttttttt");
+  //     if (Object?.keys(pre)?.length != 0) {
+  //       console.log("ifffffffffff");
+  //       await handleChangeStep(3);
+  //     } else if (Object?.keys(post)?.length != 0) {
+  //       console.log("elseeeeeeeeeeeeeee");
+  //       await handleChangeStep(5);
+  //     } else if (index == 0) {
+  //       await handleChangeStep(1);
+  //     } else {
+  //       handleChangeStep(2);
+  //     }
+  //   }
+  // };
 
   const getCourseAccess = async (c_id) => {
     let resp = await getVideosWithPercentage(user?.u_id, c_id);
@@ -113,17 +114,21 @@ function List({
         obj = accessResp.filter(
           (o) =>
             o.percentage == null ||
-            o.total_question == null ||
-            o.total_correct_ans == null
+            (o?.total == 0 && o?.percentage < 95) ||
+            (o?.total != 0 &&
+              (o.total_question == null || o.total_correct_ans == null))
         );
       }
 
       if (
         obj.length == 0 &&
-        countPassingScore(
-          accessResp[accessResp?.length - 1]?.total_question,
-          70
-        ) <= accessResp[accessResp?.length - 1]?.total_correct_ans
+        ((accessResp[accessResp?.length - 1]?.total != 0 &&
+          countPassingScore(
+            accessResp[accessResp?.length - 1]?.total_question,
+            70
+          ) <= accessResp[accessResp?.length - 1]?.total_correct_ans) ||
+          (accessResp[accessResp?.length - 1]?.total == 0 &&
+            accessResp[accessResp?.length - 1]?.percentage > 95))
       ) {
         access = true;
       }
@@ -136,15 +141,34 @@ function List({
       console.log("videoList", videoList, videos);
 
       if (videos && videos?.length > 0) {
-        let newObj = videos.filter(
-          (o) =>
+        let newObj = videos.filter((o) => {
+          console.log(
+            "ooooooooooooooooooooooo",
+            o,
+            o.total == 0 && o?.percentage < 95,
             o.percentage == null ||
-            o.total_question == null ||
-            o.total_correct_ans == null ||
-            (o.total_question != null &&
-              o.total_correct_ans != null &&
-              countPassingScore(o?.total_question, 70) > o?.total_correct_ans)
-        );
+              (o.total != 0 &&
+                (o.total_question == null ||
+                  o.total_correct_ans == null ||
+                  (o.total_question != null &&
+                    o.total_correct_ans != null &&
+                    countPassingScore(o?.total_question, 70) >
+                      o?.total_correct_ans))) ||
+              (o.total == 0 && o?.percentage < 95)
+          );
+          return (
+            o.percentage == null ||
+            (o.total != 0 &&
+              (o.total_question == null ||
+                o.total_correct_ans == null ||
+                (o.total_question != null &&
+                  o.total_correct_ans != null &&
+                  countPassingScore(o?.total_question, 70) >
+                    o?.total_correct_ans))) ||
+            (o.total == 0 && o?.percentage < 95)
+          );
+        });
+        console.log("newObj", newObj);
         let video = newObj?.length == 0 ? videos[0] : newObj[0];
 
         console.log("video", video, newObj);
@@ -158,21 +182,35 @@ function List({
 
         let i = videos.findIndex((x) => x?.v_id == video?.v_id);
         await handleChangeVideo(i);
-        let pre = await handleQuizResult(video?.v_id, 0);
-        let post = await handleQuizResult(video?.v_id, 1);
-        console.log(preResult, pre, "preResultttttttttttttttttttttttt");
-        if (Object?.keys(pre)?.length != 0) {
-          console.log("ifffffffffff");
-          await handleChangeStep(3);
-        } else if (Object?.keys(post)?.length != 0) {
-          console.log("elseeeeeeeeeeeeeee");
-          await handleChangeStep(5);
-        } else if (i == 0) {
-          await handleChangeStep(1);
+        if (video?.total == 0) {
+          if (video?.percentage > 95) {
+            handleChangeStep(3);
+          } else {
+            handleChangeStep(1);
+          }
         } else {
-          handleChangeStep(2);
+          console.log("video", video);
+          let pre = await handleQuizResult(video?.v_id, 0);
+          let post = await handleQuizResult(video?.v_id, 1);
+          console.log(preResult, pre, "preResultttttttttttttttttttttttt");
+          if (Object?.keys(pre)?.length != 0) {
+            console.log("ifffffffffff");
+            await handleChangeStep(3);
+          } else if (Object?.keys(post)?.length != 0) {
+            console.log("elseeeeeeeeeeeeeee");
+            await handleChangeStep(5);
+          } else if (i == 0) {
+            await handleChangeStep(1);
+          } else {
+            handleChangeStep(2);
+          }
         }
       }
+    } else {
+      notification({
+        type: "error",
+        message: "Please Complete previous all Categories",
+      });
     }
 
     // if (index == 0 && video?.percentage == null) {
@@ -233,22 +271,33 @@ function List({
                     obj1 = courseList[index - 1]?.videoList.filter(
                       (o) =>
                         o.percentage == null ||
-                        o.total_question == null ||
-                        o.total_correct_ans == null
+                        (o?.total == 0 && o?.percentage < 95) ||
+                        (o?.total != 0 &&
+                          (o.total_question == null ||
+                            o.total_correct_ans == null))
                     );
                   }
 
                   if (
-                    obj1.length == 0 &&
-                    countPassingScore(
-                      courseList[index - 1]?.videoList[
+                    obj1?.length == 0 &&
+                    ((courseList[index - 1]?.videoList[
+                      courseList[index - 1]?.videoList?.length - 1
+                    ]?.total != 0 &&
+                      countPassingScore(
+                        courseList[index - 1]?.videoList[
+                          courseList[index - 1]?.videoList?.length - 1
+                        ]?.total_question,
+                        70
+                      ) <=
+                        courseList[index - 1]?.videoList[
+                          courseList[index - 1]?.videoList?.length - 1
+                        ]?.total_correct_ans) ||
+                      (courseList[index - 1]?.videoList[
                         courseList[index - 1]?.videoList?.length - 1
-                      ]?.total_question,
-                      70
-                    ) <=
-                      courseList[index - 1]?.videoList[
-                        courseList[index - 1]?.videoList?.length - 1
-                      ]?.total_correct_ans
+                      ]?.total == 0 &&
+                        courseList[index - 1]?.videoList[
+                          courseList[index - 1]?.videoList?.length - 1
+                        ]?.percentage > 95))
                   ) {
                     access = true;
                   }
@@ -258,22 +307,29 @@ function List({
                     obj = course?.videoList.filter(
                       (o) =>
                         o.percentage == null ||
-                        o.total_question == null ||
-                        o.total_correct_ans == null
+                        (o?.total == 0 && o?.percentage < 95) ||
+                        (o?.total != 0 &&
+                          (o.total_question == null ||
+                            o.total_correct_ans == null))
                     );
                   }
                   if (
-                    obj.length == 0 &&
-                    countPassingScore(
-                      course?.videoList[course?.videoList?.length - 1]
-                        ?.total_question,
-                      70
-                    ) <=
-                      course?.videoList[course?.videoList?.length - 1]
-                        ?.total_correct_ans
+                    obj?.length == 0 &&
+                    ((course?.videoList[course?.videoList?.length - 1] &&
+                      countPassingScore(
+                        course?.videoList[course?.videoList?.length - 1]
+                          ?.total_question,
+                        70
+                      ) <=
+                        course?.videoList[course?.videoList?.length - 1]
+                          ?.total_correct_ans) ||
+                      (course?.videoList[course?.videoList?.length - 1]
+                        ?.total == 0 &&
+                        course?.videoList[course?.videoList?.length - 1]
+                          ?.percentage > 95))
                   ) {
                     access = access == true && "complete";
-                  } else if (obj.length == 0) {
+                  } else if (obj?.length == 0) {
                     access = access == true && "playing";
                   }
                   console.log("accesssssss1111111111", access);
@@ -282,19 +338,27 @@ function List({
                     obj = course?.videoList.filter(
                       (o) =>
                         o.percentage == null ||
-                        o.total_question == null ||
-                        o.total_correct_ans == null
+                        (o?.total == 0 && o?.percentage < 95) ||
+                        (o?.total != 0 &&
+                          (o.total_question == null ||
+                            o.total_correct_ans == null))
                     );
                   }
                   if (
-                    obj.length == 0 &&
-                    countPassingScore(
-                      course?.videoList[course?.videoList?.length - 1]
-                        ?.total_question,
-                      70
-                    ) <=
-                      course?.videoList[course?.videoList?.length - 1]
-                        ?.total_correct_ans
+                    obj?.length == 0 &&
+                    ((course?.videoList[course?.videoList?.length - 1]?.total !=
+                      0 &&
+                      countPassingScore(
+                        course?.videoList[course?.videoList?.length - 1]
+                          ?.total_question,
+                        70
+                      ) <=
+                        course?.videoList[course?.videoList?.length - 1]
+                          ?.total_correct_ans) ||
+                      (course?.videoList[course?.videoList?.length - 1]
+                        ?.total == 0 &&
+                        course?.videoList[course?.videoList?.length - 1]
+                          ?.percentage > 95))
                   ) {
                     access = "complete";
                   } else {

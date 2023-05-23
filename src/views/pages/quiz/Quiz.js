@@ -183,13 +183,14 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
                   disabled={currentQuestion == TotalQuestions - 1}
                   onClick={() => handlePageChange(currentQuestion + 1)}
                 >
+                 
+                  <div className="align-middle d-sm-inline-block d-none">
+                    Next
+                  </div>
                   <ArrowRight
                     size={14}
                     className="rotate-rtl align-middle ms-sm-50 ms-0"
                   />
-                  <div className="align-middle d-sm-inline-block d-none">
-                    Next
-                  </div>
                 </Button>
               ) : (
                 <Button color="primary" onClick={() => handleSubmitQuiz()}>

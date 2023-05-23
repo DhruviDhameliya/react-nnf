@@ -29,7 +29,6 @@ import { useState } from "react";
 const ForgotPasswordBasic = () => {
   const navigate = useNavigate();
   const [submitDisable, setSubmitDisable] = useState(false);
-
   const defaultValues = {
     u_email: "",
   };
@@ -42,31 +41,33 @@ const ForgotPasswordBasic = () => {
   } = useForm({ defaultValues });
 
   const onSubmit = async (data) => {
-    // console.log("datataaa", data);
-    if (Object.values(data).every((field) => field.length > 0)) {
-      // console.log("data", data);
-      setSubmitDisable(true);
-      const response = await sendOtp(data);
-      // console.log(response, "response");
-      if (response?.status === 1) {
-        notification({
-          type: "success",
-          message: "Password reset link has been sent to your Mail",
-        });
-        navigate("/login");
-      } else {
-        notification({
-          type: "error",
-          message: response.message,
-        });
-      }
-      setSubmitDisable(false);
-    } else {
-      for (const key in data) {
-        if (data[key]?.length === 0) {
-          setError(key, {
-            type: "manual",
+    if (!submitDisable) {
+      // console.log("datataaa", data);
+      if (Object.values(data).every((field) => field.length > 0)) {
+        // console.log("data", data);
+        setSubmitDisable(true);
+        const response = await sendOtp(data);
+        // console.log(response, "response");
+        if (response?.status === 1) {
+          notification({
+            type: "success",
+            message: "Password reset link has been sent to your Mail",
           });
+          navigate("/login");
+        } else {
+          notification({
+            type: "error",
+            message: response.message,
+          });
+        }
+        setSubmitDisable(false);
+      } else {
+        for (const key in data) {
+          if (data[key]?.length === 0) {
+            setError(key, {
+              type: "manual",
+            });
+          }
         }
       }
     }

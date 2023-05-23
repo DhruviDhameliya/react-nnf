@@ -1,6 +1,6 @@
 export const toastTranslucent = (
   <pre>
-    <code className='language-jsx'>
+    <code className="language-jsx">
       {`
 
 import { Toast, ToastBody, ToastHeader, Row, Col } from 'reactstrap'
@@ -109,15 +109,15 @@ export default ToastTranslucent
 `}
     </code>
   </pre>
-)
+);
 
 export const toastHeaderIcons = (
   <pre>
-    <code className='language-jsx'>
+    <code className="language-jsx">
       {`
 
 import { Toast, ToastBody, ToastHeader, Spinner, Row, Col } from 'reactstrap'
-import logo from '@src/assets/images/logo/logo.png'
+import logo from '@src/assets/images/logo/logo1.png'
 
 const close = (
   <button type='button' className='ms-1 btn-close'>
@@ -200,4 +200,4 @@ export default ToastHeaderIcons
 `}
     </code>
   </pre>
-)
+);

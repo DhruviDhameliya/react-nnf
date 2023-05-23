@@ -296,7 +296,7 @@ const PersonalUpdate = (props) => {
             )}
           </Col>
 
-          <Col sm="12" className="mb-1">
+          <Col sm="6" className="mb-1">
             <Label className="form-label" for="address">
               Address
             </Label>
@@ -305,7 +305,20 @@ const PersonalUpdate = (props) => {
               name="address"
               control={control}
               render={({ field }) => (
+                // <Input
+                //   id="address"
+                //   name="address"
+                //   invalid={errors?.address && true}
+                //   {...field}
+                //   placeholder="Enter Address"
+                //   onChange={(e) => {
+                //     field.onChange(e.target?.value);
+                //     onHandleChange(e.target?.value, e.target?.name);
+                //   }}
+                // />
                 <Input
+                  type="textarea"
+                  rows="3"
                   id="address"
                   name="address"
                   invalid={errors?.address && true}

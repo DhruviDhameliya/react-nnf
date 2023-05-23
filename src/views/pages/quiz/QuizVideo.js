@@ -62,8 +62,11 @@ const QuizVideo = (props) => {
     handleQuizResult,
     handleChangeStep,
     handleNext,
+    getVideoList,
+    currentCourse,
   } = props;
 
+  console.log("videoList",videoList);
   let user = JSON.parse(secureLocalStorage.getItem("userData"));
   const [watchedPercentage, setWatchedPercentage] = useState(0);
   const [played, setPlayed] = useState(0);
@@ -167,15 +170,74 @@ const QuizVideo = (props) => {
           </Progress>
         </Card>
         <div className="d-flex align-content-center justify-content-between w-100 p-1">
+          {console.log(
+            "(watchedPercentage < 95 || video?.percentage < 95",
+            watchedPercentage > 95,
+            video?.percentage > 95
+          )}
+
           {countPassingScore(video?.total_question, 70) <=
-          video?.total_correct_ans ? (
+            video?.total_correct_ans || video?.total == 0 ? (
             <Button
               color="primary"
               disabled={
-                countPassingScore(video?.total_question, 70) >
-                video?.total_correct_ans
+                (video?.total != 0 &&
+                  countPassingScore(video?.total_question, 70) <=
+                    video?.total_correct_ans) ||
+                (video?.total == 0 &&
+                  (watchedPercentage > 95 || video?.percentage > 95))
+                  ? false
+                  : true
               }
-              onClick={() => handleNext(currentVideo + 1)}
+              onClick={async () => {
+                console.log("111111111");
+                if (
+                  video?.total == 0 &&
+                  (watchedPercentage > 95 || video?.percentage > 95)
+                ) {
+                  console.log("22222222222222");
+                  // await getVideoList(currentCourse);
+                  if (currentVideo + 1 == videoList?.length) {
+                    if (currentCourse == courseList?.length - 1) {
+                      navigate("/certificate");
+                    } else {
+                      handleChangeStep(0);
+                      getCourseList();
+                    }
+                  } else {
+                    handleChangeVideo(currentVideo + 1);
+
+                    if (videoList[currentVideo + 1]?.total == 0) {
+                      if (videoList[currentVideo + 1]?.percentage > 95) {
+                        handleChangeStep(3);
+                      } else {
+                        handleChangeStep(1);
+                      }
+                    } else {
+                      let pre = await handleQuizResult(
+                        videoList[currentVideo + 1]?.v_id,
+                        0
+                      );
+                      let post = await handleQuizResult(
+                        videoList[currentVideo + 1]?.v_id,
+                        1
+                      );
+                      if (Object?.keys(pre)?.length != 0) {
+                        // console.log("ifffffffffff");
+                        await handleChangeStep(3);
+                      } else if (Object?.keys(post)?.length != 0) {
+                        await handleChangeStep(5);
+                      } else if (currentVideo + 1 == 0) {
+                        await handleChangeStep(1);
+                      } else {
+                        handleChangeStep(2);
+                      }
+                    }
+                  }
+                }
+                console.log("33333333");
+                await handleNext(currentVideo + 1);
+              }}
             >
               <ArrowRight
                 size={14}
@@ -193,13 +255,13 @@ const QuizVideo = (props) => {
                 watchedPercentage < 95
               }
             >
+              <div className="align-middle d-sm-inline-block d-none">
+                Start Quiz
+              </div>
               <ArrowRight
                 size={14}
                 className="rotate-rtl align-middle ms-sm-50 ms-0"
               />
-              <div className="align-middle d-sm-inline-block d-none">
-                Start Quiz
-              </div>
             </Button>
           )}
 

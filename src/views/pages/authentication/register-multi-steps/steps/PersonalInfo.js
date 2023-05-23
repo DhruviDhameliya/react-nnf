@@ -245,9 +245,18 @@ const PersonalInfo = ({
                 </div>
               )}
             />
-
+            {console.log("gender", errors?.gender?.message)}
             {errors?.gender && (
-              <FormFeedback>{errors?.gender?.message}</FormFeedback>
+              <div
+                style={{
+                  width: "100%",
+                  fontSize: "0.857rem",
+                  color: "#ea5455",
+                  marginTop: "0.25rem",
+                }}
+              >
+                {errors?.gender?.message}
+              </div>
             )}
           </Col>
 
@@ -305,7 +314,16 @@ const PersonalInfo = ({
               )}
             />
             {errors?.marital_status && (
-              <FormFeedback>{errors?.marital_status?.message}</FormFeedback>
+              <div
+                style={{
+                  width: "100%",
+                  fontSize: "0.857rem",
+                  color: "#ea5455",
+                  marginTop: "0.25rem",
+                }}
+              >
+                {errors?.marital_status?.message}
+              </div>
             )}
           </Col>
 
@@ -344,7 +362,7 @@ const PersonalInfo = ({
             )}
           </Col>
 
-          <Col sm="12" className="mb-1">
+          <Col sm="6" className="mb-1">
             <Label className="form-label" for="address">
               Address
             </Label>
@@ -353,9 +371,22 @@ const PersonalInfo = ({
               name="address"
               control={control}
               render={({ field }) => (
+                // <Input
+                //   id="address"
+                //   name="address"
+                //   invalid={errors?.address && true}
+                //   {...field}
+                //   placeholder="Enter Address"
+                //   onChange={(e) => {
+                //     field.onChange(e.target?.value);
+                //     onHandleChange(e.target?.value, e.target?.name);
+                //   }}
+                // />
                 <Input
-                  id="address"
+                  type="textarea"
+                  rows="3"
                   name="address"
+                  id="address"
                   invalid={errors?.address && true}
                   {...field}
                   placeholder="Enter Address"
