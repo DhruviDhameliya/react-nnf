@@ -147,14 +147,14 @@ function List({
             o,
             o.total == 0 && o?.percentage < 95,
             o.percentage == null ||
-              (o.total != 0 &&
-                (o.total_question == null ||
-                  o.total_correct_ans == null ||
-                  (o.total_question != null &&
-                    o.total_correct_ans != null &&
-                    countPassingScore(o?.total_question, 70) >
-                      o?.total_correct_ans))) ||
-              (o.total == 0 && o?.percentage < 95)
+            (o.total != 0 &&
+              (o.total_question == null ||
+                o.total_correct_ans == null ||
+                (o.total_question != null &&
+                  o.total_correct_ans != null &&
+                  countPassingScore(o?.total_question, 70) >
+                  o?.total_correct_ans))) ||
+            (o.total == 0 && o?.percentage < 95)
           );
           return (
             o.percentage == null ||
@@ -164,7 +164,7 @@ function List({
                 (o.total_question != null &&
                   o.total_correct_ans != null &&
                   countPassingScore(o?.total_question, 70) >
-                    o?.total_correct_ans))) ||
+                  o?.total_correct_ans))) ||
             (o.total == 0 && o?.percentage < 95)
           );
         });
@@ -257,7 +257,7 @@ function List({
     <Fragment>
       <div className="email-app-list cursor-pointer w-100">
         <PerfectScrollbar className="" options={{ wheelPropagation: false }}>
-          <Row>
+          <Row className="mx-0 mt-75">
             {courseList &&
               courseList?.map((course, index) => {
                 let obj;
@@ -289,9 +289,9 @@ function List({
                         ]?.total_question,
                         70
                       ) <=
-                        courseList[index - 1]?.videoList[
-                          courseList[index - 1]?.videoList?.length - 1
-                        ]?.total_correct_ans) ||
+                      courseList[index - 1]?.videoList[
+                        courseList[index - 1]?.videoList?.length - 1
+                      ]?.total_correct_ans) ||
                       (courseList[index - 1]?.videoList[
                         courseList[index - 1]?.videoList?.length - 1
                       ]?.total == 0 &&
@@ -321,8 +321,8 @@ function List({
                           ?.total_question,
                         70
                       ) <=
-                        course?.videoList[course?.videoList?.length - 1]
-                          ?.total_correct_ans) ||
+                      course?.videoList[course?.videoList?.length - 1]
+                        ?.total_correct_ans) ||
                       (course?.videoList[course?.videoList?.length - 1]
                         ?.total == 0 &&
                         course?.videoList[course?.videoList?.length - 1]
@@ -353,8 +353,8 @@ function List({
                           ?.total_question,
                         70
                       ) <=
-                        course?.videoList[course?.videoList?.length - 1]
-                          ?.total_correct_ans) ||
+                      course?.videoList[course?.videoList?.length - 1]
+                        ?.total_correct_ans) ||
                       (course?.videoList[course?.videoList?.length - 1]
                         ?.total == 0 &&
                         course?.videoList[course?.videoList?.length - 1]
@@ -370,6 +370,7 @@ function List({
                 return (
                   <Col md="6" lg="3">
                     <Card
+                      className="mb-75"
                       onClick={async () => {
                         await changeCourse(course, index);
                       }}

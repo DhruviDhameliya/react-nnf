@@ -376,7 +376,7 @@ function Question() {
     return (
       <>
         <div className="expandable-content p-2">
-          {data?.option_name?.split(",")?.map((option, index) => (
+          {data?.option_name?.split(";")?.map((option, index) => (
             <div>
               <p>
                 {index}. : {option}
@@ -522,6 +522,7 @@ function Question() {
                   Question
                 </Label>
                 <Input
+                  type='textarea'
                   id="question"
                   name="question"
                   autoFocus

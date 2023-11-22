@@ -33,7 +33,7 @@ const Question = ({ question, currentQuestion, handleAnswer, ansList }) => {
         <h5>Question{currentQuestion + 1}</h5>1 Mark
       </div>
       <div className="d-flex justify-content-between mb-1">
-        <h4>{question?.question}</h4>
+        <h4 style={{ whiteSpace: "pre-wrap" }}>{question?.question}</h4>
       </div>
       <div className="mb-1">
         {optionsList &&

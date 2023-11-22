@@ -165,7 +165,7 @@ const DefaultRoute = "/dashboard";
 
 // ** Merge Routes
 // const Routes = [...AdminRoutes, ...TlsAdminRoute, ...AuthenticationRoutes];
-const Routes = [...AdminRoutes, ...AuthenticationRoutes,...UserRoutes];
+const Routes = [...AdminRoutes, ...AuthenticationRoutes, ...UserRoutes];
 const getRouteMeta = (route) => {
   if (isObjEmpty(route.element.props)) {
     if (route.meta) {
@@ -200,7 +200,7 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
             // eslint-disable-next-line multiline-ternary
             isObjEmpty(route.element.props) && isBlank === false
               ? // eslint-disable-next-line multiline-ternary
-                LayoutWrapper
+              LayoutWrapper
               : Fragment;
           route.element = (
             <Wrapper {...(isBlank === false ? getRouteMeta(route) : {})}>

@@ -55,7 +55,7 @@ const VerticalMenuHeader = (props) => {
   return (
     <div className="navbar-header">
       <ul className="nav navbar-nav flex-row">
-        <li className="nav-item me-auto">
+        <li className={`nav-item me-auto ${!menuCollapsed && "ms-auto"}`}>
           {/* <NavLink
             // to={user ? getHomeRouteForLoggedInUser(user.role) : "/"}
             className="navbar-brand"
@@ -64,7 +64,8 @@ const VerticalMenuHeader = (props) => {
             <img
               src={themeConfig.app.appLogoImage}
               alt="logo"
-              width={!menuCollapsed ? "95px" : "45px"}
+              width={!menuCollapsed ? "95px" : "55px"}
+              style={{ maxWidth: !menuCollapsed ? "95px" : "55px" }}
             />
           </span>
           <h2 className="brand-text mb-0">{themeConfig.app.appName}</h2>
