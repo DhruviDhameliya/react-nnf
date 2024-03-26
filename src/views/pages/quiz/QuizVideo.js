@@ -66,7 +66,7 @@ const QuizVideo = (props) => {
     currentCourse,
   } = props;
 
-  console.log("videoList",videoList);
+  // console.log("videoList",videoList);
   let user = JSON.parse(secureLocalStorage.getItem("userData"));
   const [watchedPercentage, setWatchedPercentage] = useState(0);
   const [played, setPlayed] = useState(0);
@@ -170,11 +170,11 @@ const QuizVideo = (props) => {
           </Progress>
         </Card>
         <div className="d-flex align-content-center justify-content-between w-100 p-1">
-          {console.log(
+          {/* {console.log(
             "(watchedPercentage < 95 || video?.percentage < 95",
             watchedPercentage > 95,
             video?.percentage > 95
-          )}
+          )} */}
 
           {countPassingScore(video?.total_question, 70) <=
             video?.total_correct_ans || video?.total == 0 ? (
@@ -190,19 +190,19 @@ const QuizVideo = (props) => {
                   : true
               }
               onClick={async () => {
-                console.log("111111111");
+                // console.log("111111111");
                 if (
                   video?.total == 0 &&
                   (watchedPercentage > 95 || video?.percentage > 95)
                 ) {
-                  console.log("22222222222222");
+                  // console.log("22222222222222");
                   // await getVideoList(currentCourse);
                   if (currentVideo + 1 == videoList?.length) {
-                    if (currentCourse == courseList?.length - 1) {
+                    if (currentCourse == videoList?.length - 1) {
                       navigate("/certificate");
                     } else {
                       handleChangeStep(0);
-                      getCourseList();
+                      // getCourseList();
                     }
                   } else {
                     handleChangeVideo(currentVideo + 1);
@@ -235,7 +235,7 @@ const QuizVideo = (props) => {
                     }
                   }
                 }
-                console.log("33333333");
+                // console.log("33333333");
                 await handleNext(currentVideo + 1);
               }}
             >
