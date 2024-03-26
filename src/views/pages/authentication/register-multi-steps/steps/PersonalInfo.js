@@ -245,7 +245,7 @@ const PersonalInfo = ({
                 </div>
               )}
             />
-            {console.log("gender", errors?.gender?.message)}
+            {/* {console.log("gender", errors?.gender?.message)} */}
             {errors?.gender && (
               <div
                 style={{
@@ -495,11 +495,11 @@ const PersonalInfo = ({
                     field.onChange(e.target?.value);
                     onHandleChange(e.target?.value, e.target?.name);
                     if (e.target?.value && e.target?.value?.length == 10) {
-                      console.log("else");
+                      // console.log("else");
                       checkMobileNumber(e.target?.value);
                       // clearErrors("mobile");
                     } else {
-                      console.log("ifff");
+                      // console.log("ifff");
                       setError("mobile", {
                         type: "custom",
                         message: "Mobile Number Must be 10 character long",

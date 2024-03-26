@@ -13,5 +13,5 @@ export const format = (seconds) => {
 };
 
 export const countPassingScore = (total, percentage) => {
-  return Math.ceil((parseInt(total) * parseInt(percentage)) / 100);
+  return Math.floor((parseInt(total) * parseInt(percentage)) / 100);
 };

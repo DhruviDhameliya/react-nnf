@@ -109,7 +109,7 @@ function List({
     let access = false;
     if (index != 0) {
       accessResp = await getCourseAccess(courseList[index - 1]?.c_id);
-      console.log("accessResp", accessResp);
+      // console.log("accessResp", accessResp);
       if (accessResp && accessResp?.length > 0) {
         obj = accessResp.filter(
           (o) =>
@@ -133,29 +133,29 @@ function List({
         access = true;
       }
     }
-    console.log("obj", obj, access);
+    // console.log("obj", obj, access);
 
     if (index == 0 || access == true) {
       handleChangeCourse(index);
       let videos = await getVideoList(index);
-      console.log("videoList", videoList, videos);
+      // console.log("videoList", videoList, videos);
 
       if (videos && videos?.length > 0) {
         let newObj = videos.filter((o) => {
-          console.log(
-            "ooooooooooooooooooooooo",
-            o,
-            o.total == 0 && o?.percentage < 95,
-            o.percentage == null ||
-            (o.total != 0 &&
-              (o.total_question == null ||
-                o.total_correct_ans == null ||
-                (o.total_question != null &&
-                  o.total_correct_ans != null &&
-                  countPassingScore(o?.total_question, 70) >
-                  o?.total_correct_ans))) ||
-            (o.total == 0 && o?.percentage < 95)
-          );
+          // console.log(
+          //   "ooooooooooooooooooooooo",
+          //   o,
+          //   o.total == 0 && o?.percentage < 95,
+          //   o.percentage == null ||
+          //   (o.total != 0 &&
+          //     (o.total_question == null ||
+          //       o.total_correct_ans == null ||
+          //       (o.total_question != null &&
+          //         o.total_correct_ans != null &&
+          //         countPassingScore(o?.total_question, 70) >
+          //         o?.total_correct_ans))) ||
+          //   (o.total == 0 && o?.percentage < 95)
+          // );
           return (
             o.percentage == null ||
             (o.total != 0 &&
@@ -168,10 +168,10 @@ function List({
             (o.total == 0 && o?.percentage < 95)
           );
         });
-        console.log("newObj", newObj);
+        // console.log("newObj", newObj);
         let video = newObj?.length == 0 ? videos[0] : newObj[0];
 
-        console.log("video", video, newObj);
+        // console.log("video", video, newObj);
         if (video?.percentage == null) {
           let resp = await updateVideoPercentage({
             v_id: video.v_id,
@@ -189,15 +189,15 @@ function List({
             handleChangeStep(1);
           }
         } else {
-          console.log("video", video);
+          // console.log("video", video);
           let pre = await handleQuizResult(video?.v_id, 0);
           let post = await handleQuizResult(video?.v_id, 1);
-          console.log(preResult, pre, "preResultttttttttttttttttttttttt");
+          // console.log(preResult, pre, "preResultttttttttttttttttttttttt");
           if (Object?.keys(pre)?.length != 0) {
-            console.log("ifffffffffff");
+            // console.log("ifffffffffff");
             await handleChangeStep(3);
           } else if (Object?.keys(post)?.length != 0) {
-            console.log("elseeeeeeeeeeeeeee");
+            // console.log("elseeeeeeeeeeeeeee");
             await handleChangeStep(5);
           } else if (i == 0) {
             await handleChangeStep(1);
@@ -301,7 +301,7 @@ function List({
                   ) {
                     access = true;
                   }
-                  console.log("accesssssss33333333", access);
+                  // console.log("accesssssss33333333", access);
 
                   if (course?.videoList && course?.videoList?.length > 0) {
                     obj = course?.videoList.filter(
@@ -332,7 +332,7 @@ function List({
                   } else if (obj?.length == 0) {
                     access = access == true && "playing";
                   }
-                  console.log("accesssssss1111111111", access);
+                  // console.log("accesssssss1111111111", access);
                 } else {
                   if (course?.videoList && course?.videoList?.length > 0) {
                     obj = course?.videoList.filter(
@@ -365,7 +365,7 @@ function List({
                     access = true;
                   }
                 }
-                console.log("access", access);
+                // console.log("access", access);
 
                 return (
                   <Col md="6" lg="3">
