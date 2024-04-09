@@ -138,7 +138,8 @@ const QuizResult = ({
               <div>
                 <div>Passing Score </div>
                 <b>
-                  {Math.ceil((parseInt(preResult?.total_question) * 70) / 100)}
+                  {/* {Math.ceil((parseInt(preResult?.total_question) * 70) / 100)} */}
+                  {countPassingScore(preResult?.total_question, 70)}
                 </b>
               </div>
             </div>

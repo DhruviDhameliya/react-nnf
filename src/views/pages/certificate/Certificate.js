@@ -29,16 +29,16 @@ const Certificate = () => {
           image2: certificate,
         };
         loadImages(sources, function (images) {
-          context.drawImage(images.image2, 0, 0, 1100, 631);
+          context.drawImage(images.image2, 0, 0, 918.73, 650);
           context.font = " bold 20px Verdana";
           context.textAlign = "center";
-          context.fillText(resp?.name, 550, 315);
+          context.fillText(resp?.name, 465, 325);
           context.font = "small-caps bold 16px serif";
-          context.fillText(resp?.certificate_name, 660, 445);
+          context.fillText(resp?.certificate_name, 550, 460);
           context.fillText(
             moment(resp?.created_timestamp).format("DD-MM-YYYY"),
-            855,
-            395
+            705,
+            405
           );
           setImagePreview(myCanvas?.current?.toDataURL("image/png"));
         });
@@ -94,8 +94,8 @@ const Certificate = () => {
         <canvas
           className="certificate"
           ref={myCanvas}
-          width={1100}
-          height={631}
+          width={918.73}
+          height={650}
           style={{
             //   // border: "2px solid",
             //   backgroundImage: `url(${pass})`,

@@ -99,7 +99,7 @@ const Instruction = (props) => {
                   id="conformation"
                   name="conformation"
                   onChange={(e) => {
-                    console.log("e.target.checked", e.target.checked);
+                    // console.log("e.target.checked", e.target.checked);
                     setConformation(e.target.checked);
                   }}
                 />

@@ -114,7 +114,7 @@ const QuizApp = () => {
     // ) {
     //   navigate("/certificate");
     // } else {
-    console.log("@@@@@@@@@@@@", index, videoList[index - 1]);
+    // console.log("@@@@@@@@@@@@", index, videoList[index - 1]);
     if (
       index == 0 ||
       (index != 0 &&
@@ -208,7 +208,7 @@ const QuizApp = () => {
   };
 
   const getVideoList = async (course) => {
-    console.log("course",course);
+    // console.log("course",course);
     let resp = await getVideosWithPercentage(
       user?.u_id,
       courseList[course]?.c_id
