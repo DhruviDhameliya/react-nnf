@@ -25,3 +25,10 @@ yarn-error.log*
 .docz
 .eslintcache
 .vscode
+
+#DNX
+package-lock.json
+yarn.lock
+
+*.rar
+*.zip

@@ -65,11 +65,9 @@ export const getAttributeById = async (type) => {
 //   }
 // };
 
-export const getAllUsers = async (page, perPage) => {
+export const getAllUsers = async (data) => {
   try {
-    const res = await Request.get(
-      ApiRoutes.GETALLUSERS + "/" + page + "/" + perPage
-    );
+    const res = await Request.post(ApiRoutes.GETALLUSERS, data);
     return res;
   } catch (error) {
     throw error;
@@ -105,7 +103,7 @@ export const updateQuestion = async (data) => {
 
 export const getQuestions = async (data) => {
   try {
-    const res = await Request.post(ApiRoutes.GETQUESTIONS,data);
+    const res = await Request.post(ApiRoutes.GETQUESTIONS, data);
     return res;
   } catch (error) {
     throw error;
@@ -141,9 +139,7 @@ export const updateVideoPercentage = async (data) => {
 
 export const getCourseWithVideoData = async (u_id) => {
   try {
-    const res = await Request.get(
-      ApiRoutes.GETCOURSEWITHVIDEODATA + "/" + u_id
-    );
+    const res = await Request.get(ApiRoutes.GETCOURSEWITHVIDEODATA + "/" + u_id);
     return res;
   } catch (error) {
     throw error;
@@ -161,9 +157,7 @@ export const checkCourseAccess = async (u_id) => {
 
 export const getVideosWithPercentage = async (u_id, course_id) => {
   try {
-    const res = await Request.get(
-      ApiRoutes.GETVIDEOSWITHPERCENTAGE + "/" + u_id + "/" + course_id
-    );
+    const res = await Request.get(ApiRoutes.GETVIDEOSWITHPERCENTAGE + "/" + u_id + "/" + course_id);
     return res;
   } catch (error) {
     throw error;
@@ -207,9 +201,7 @@ export const insertQuiz = async (data) => {
 
 export const getQuizResult = async (u_id, v_id, type) => {
   try {
-    const res = await Request.get(
-      ApiRoutes.GETQUIZRESULT + "/" + u_id + "/" + v_id + "/" + type
-    );
+    const res = await Request.get(ApiRoutes.GETQUIZRESULT + "/" + u_id + "/" + v_id + "/" + type);
     return res;
   } catch (error) {
     throw error;
@@ -290,9 +282,7 @@ export const getExcelQuizReport = async (data) => {
 
 export const updateCertificateStatus = async (u_id) => {
   try {
-    const res = await Request.get(
-      ApiRoutes.UPDATECERTIFICATESTATUS + "/" + u_id
-    );
+    const res = await Request.get(ApiRoutes.UPDATECERTIFICATESTATUS + "/" + u_id);
     return res;
   } catch (error) {
     throw error;
@@ -320,6 +310,78 @@ export const sendOtp = async (data) => {
 export const updateNewPassword = async (data) => {
   try {
     const res = await Request.post(ApiRoutes.UPDATENEWPASSWORD, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getQuizUsers = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.GETQUIZUSERLIST, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getQuizReportOfUser = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.GETQUIZREPORTOFUSER, data);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getExcelOfQuizReport = async (data) => {
+  try {
+    const res = await Request.get("/fetch-quizReportExcel/" + data, {
+      responseType: "blob",
+    });
+    const url = window.URL.createObjectURL(new Blob([res]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `user_${data}_quiz_data.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getOverallQuizReport = async (type) => {
+  try {
+    const res = await Request.get(ApiRoutes.GETOVERALLQUIZREPORT + "/" + type);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const downloadExcelOfQuizReport = async (type) => {
+  try {
+    const res = await Request.get("/fetch-allQuizReportExcel/" + type, {
+      responseType: "blob",
+    });
+    const url = window.URL.createObjectURL(new Blob([res]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `User_${type == 0 ? "Pre" : "Post"}_Quiz_Report.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getExcelUsers = async (data) => {
+  try {
+    const res = await Request.post(ApiRoutes.GETEXCELUSERS, data);
     return res;
   } catch (error) {
     throw error;

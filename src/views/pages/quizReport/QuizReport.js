@@ -1,16 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-
-// ** Table Columns
-// import { columns } from "./columns";
-
-// ** Third Party Components
-import ReactPaginate from "react-paginate";
-import { ChevronDown } from "react-feather";
+import { ChevronDown, Download } from "react-feather";
 import DataTable from "react-data-table-component";
-
-// ** Reactstrap Imports
 import {
   Button,
   Input,
@@ -19,47 +10,47 @@ import {
   Card,
   CardHeader,
   CardTitle,
+  Spinner,
 } from "reactstrap";
-
-// ** Store & Actions
-// import { getData } from "../store";
-// import { useDispatch, useSelector } from "react-redux";
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import {
-  getExcelQuizReport,
-  getQuizReport,
+  downloadExcelOfQuizReport,
+  getExcelOfQuizReport,
+  getOverallQuizReport,
+  getQuizReportOfUser,
+  getQuizUsers,
 } from "../../../@core/api/common_api";
 import { notification } from "../../../@core/constants/notification";
-import ReactExport from "react-data-export";
-import XLSX from "sheetjs-style";
-import * as FileSaver from "file-saver";
 
 const QuizReport = () => {
-  //   const dispatch = useDispatch();
-  //   const store = useSelector((state) => state.invoice);
-
-  // ** States
   const [quizReportData, setQuizReportData] = useState([]);
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalQuizReportData, setTotalQuizReportData] = useState(0);
-  const [excelQuizReportData, setExcelQuizReportData] = useState([]);
-
-  const ExcelFile = ReactExport.ExcelFile;
-  const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-  const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+  const [preLoading, setPreLoading] = useState(false);
+  const [postLoading, setPostLoading] = useState(false);
 
   useEffect(() => {
     getQuizReportData(value, currentPage, rowsPerPage);
   }, []);
 
+  const downloadUserQuizReport = async (type) => {
+    let resp = await getQuizReportOfUser(type);
+    await getExcelOfQuizReport(resp?.u_id);
+  };
+  const downloadOverallQuizReport = async (row) => {
+    row == 0 ? setPreLoading(true) : setPostLoading(true)
+    await getOverallQuizReport(row);
+    await downloadExcelOfQuizReport(row);
+    row == 0 ? setPreLoading(false) : setPostLoading(false)
+  };
+
   const getQuizReportData = async (val, page, perPage) => {
     let data = { u_name: val, page: page, perPage: perPage };
 
-    let resp = await getQuizReport(data);
-    // console.log("resp", resp);
+    let resp = await getQuizUsers(data);
     if (resp?.status == 1) {
       setQuizReportData(resp?.data);
       setTotalQuizReportData(resp?.total_user);
@@ -71,67 +62,6 @@ const QuizReport = () => {
       setQuizReportData([]);
       setTotalQuizReportData(0);
     }
-  };
-
-  const exportData = async () => {
-    let resp = await getExcelQuizReport({ u_name: value });
-    // console.log("resp", resp);
-    if (resp?.status == 1) {
-      setExcelQuizReportData(resp?.data);
-    } else {
-      notification({
-        type: "error",
-        message: resp?.message,
-      });
-      setExcelQuizReportData([]);
-    }
-
-    // var newobj = [];
-
-    // resp?.data?.map((row, i) => {
-    //   newobj = [
-    //     ...newobj,
-    //     [
-    //
-    //     ],
-    //   ];
-    // });
-
-    // setExcelQuizReportData([
-    //   {
-    //     columns: [
-    //       { title: "User Name", width: { wpx: 150 } },
-    //       { title: "Video", width: { wpx: 150 } },
-    //       { title: "Total", width: { wpx: 150 } },
-    //       { title: "Pre Result", width: { wpx: 150 } },
-    //       { title: "Post Result", width: { wpx: 150 } },
-    //       { title: "Total Attempt", width: { wpx: 150 } },
-    //     ],
-    //     data: newobj,
-    //   },
-    // ]);
-    let newArray = [];
-    resp?.data?.map((row, i) => {
-      newArray.push({
-        "User Name": row.u_name,
-        Video: row.v_name,
-        Total: row.total_question,
-        "Pre Result ": row.pre_correct_ans,
-        "Post Result": row.post_correct_ans,
-        "Total Attempt": row.attempt,
-      });
-    });
-    const fileType =
-      "application/vnd.openxmlformates-officedocument.spreadsheetmlsheet;charset=UTF-8";
-    const fileExtension = ".xlsx";
-    const exportToExcel = async () => {
-      const ws = XLSX.utils.json_to_sheet(newArray);
-      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-      const data = new Blob([excelBuffer], { type: fileType });
-      FileSaver.saveAs(data, "Report" + fileExtension);
-    };
-    exportToExcel();
   };
 
   const handleFilter = (val) => {
@@ -153,33 +83,6 @@ const QuizReport = () => {
     getQuizReportData(value, page, rowsPerPage);
   };
 
-  const CustomPagination = () => {
-    return (
-      <ReactPaginate
-        previousLabel=""
-        nextLabel=""
-        forcePage={currentPage}
-        onPageChange={(page) => handlePagination(page)}
-        pageCount={20 / 10}
-        breakLabel="..."
-        pageRangeDisplayed={2}
-        marginPagesDisplayed={2}
-        activeClassName="active"
-        pageClassName="page-item"
-        breakClassName="page-item"
-        breakLinkClassName="page-link"
-        nextLinkClassName="page-link"
-        nextClassName="page-item next"
-        previousClassName="page-item prev"
-        previousLinkClassName="page-link"
-        pageLinkClassName="page-link"
-        // breakClassName='page-item'
-        // breakLinkClassName='page-link'
-        containerClassName="pagination react-paginate separated-pagination pagination-sm justify-content-end pr-1 mt-1"
-      />
-    );
-  };
-
   const columns = [
     {
       name: "No.",
@@ -189,27 +92,35 @@ const QuizReport = () => {
     },
     {
       name: "User name",
-      selector: (row) => row.u_name,
+      selector: (row) => row.name,
     },
     {
-      name: "Video",
-      selector: (row) => row.v_name,
+      name: "Mobile",
+      selector: (row) => row.mobile,
     },
     {
-      name: "Total",
-      selector: (row) => row.total_question,
+      name: "Email",
+      selector: (row) => row.u_email,
     },
     {
-      name: "Pre Result",
-      selector: (row) => row.pre_correct_ans,
-    },
-    {
-      name: "Post Result",
-      selector: (row) => row.post_correct_ans,
-    },
-    {
-      name: "Total Attempt",
-      selector: (row) => row.attempt,
+      name: "Actions",
+      allowOverflow: true,
+      cell: (row) => {
+        return (
+          <div>
+            <span title="Download Quiz Report">
+              <Download
+                size={18}
+                style={{ marginRight: "5px", cursor: "pointer" }}
+                color="green"
+                onClick={() => {
+                  downloadUserQuizReport(row);
+                }}
+              />
+            </span>
+          </div>
+        );
+      },
     },
   ];
 
@@ -233,7 +144,7 @@ const QuizReport = () => {
                   type="text"
                   value={value}
                   onChange={(e) => handleFilter(e.target.value)}
-                  placeholder="Search Name or Video"
+                  placeholder="Search Name or Mobile or Email"
                 />
               </div>
             </Col>
@@ -247,26 +158,22 @@ const QuizReport = () => {
                   color="primary"
                   type="button"
                   onClick={() => {
-                    exportData();
+                    downloadOverallQuizReport(0);
                   }}
                 >
-                  Export
+                  {preLoading && <Spinner color="white" size="sm" />} Export Pre
+                  Quiz Report
                 </Button>
-                {/* {excelData && excelData?.length > 0 && ( */}
-
-                {/* <ExcelFile
-                  filename={`abc`}
-                  //   element={
-                  //     <button className="btn btn-primary">Export Excel</button>
-                  //   }
+                <Button
+                  className="me-1"
+                  color="primary"
+                  type="button"
+                  onClick={() => {
+                    downloadOverallQuizReport(1);
+                  }}
                 >
-                  <ExcelSheet
-                    dataSet={excelQuizReportData}
-                    name="Organization"
-                  />
-                </ExcelFile> */}
-
-                {/* )} */}
+                  {postLoading && <Spinner color="white" size="sm" />} Export Post Quiz Report
+                </Button>
               </div>
             </Col>
           </Row>
@@ -285,8 +192,6 @@ const QuizReport = () => {
             paginationDefaultPage={currentPage}
             className="react-dataTable"
             sortIcon={<ChevronDown size={10} />}
-            // paginationComponent={CustomPagination}
-            // expandableRows
             expandOnRowClicked
             data={quizReportData}
           />

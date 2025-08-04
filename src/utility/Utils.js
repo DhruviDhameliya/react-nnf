@@ -51,7 +51,6 @@ export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
 };
 
 export const handleLogin = async (data) => {
-  console.log("daattatataaa", JSON.stringify(data));
   try {
     // let abc = JSON.stringify(data);
     // await localStorage.setItem("userData", Buffer.from(abc).toString("base64"));
