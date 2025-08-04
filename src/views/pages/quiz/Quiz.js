@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Progress,
-} from "reactstrap";
-import {
-  getQuestionsForQuiz,
-  getQuizResult,
-  insertQuiz,
-} from "../../../@core/api/common_api";
+import { Button, Card, CardBody, CardFooter, CardHeader, CardTitle, Progress } from "reactstrap";
+import { getQuestionsForQuiz, getQuizResult, insertQuiz } from "../../../@core/api/common_api";
 import secureLocalStorage from "react-secure-storage";
 import { notification } from "../../../@core/constants/notification";
 import Question from "./Question";
@@ -33,6 +21,7 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
   });
   const [result, setResult] = useState({});
   const [attempt, setAttempt] = useState({});
+  const [quizLoading, setQuizLoading] = useState(false);
 
   useEffect(() => {
     handleQuizResult();
@@ -103,6 +92,7 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
         message: "All Questions are mandatory",
       });
     } else {
+      setQuizLoading(true);
       // console.log("answerListttttttttttttttt", answerList);
       // let data = answerList;
       const entries = Object.values(answerList?.ansList);
@@ -137,15 +127,13 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
           message: resp?.message,
         });
       }
+      setQuizLoading(false);
     }
   };
 
   return (
     <Fragment>
-      <div
-        className="app-action pb-3"
-        style={{ height: "80%", overflow: "scroll" }}
-      >
+      <div className="app-action pb-3" style={{ height: "80%", overflow: "scroll" }}>
         <Card className="">
           <CardHeader className="flex-md-row flex-column align-md-items-center align-items-center border-bottom">
             <CardTitle tag="h5">Quiz</CardTitle>
@@ -156,51 +144,25 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
           )} */}
           <CardBody className="m-1">
             {questionList[currentQuestion] && (
-              <Question
-                question={questionList[currentQuestion]}
-                currentQuestion={currentQuestion}
-                handleAnswer={handleAnswer}
-                ansList={answerList?.ansList}
-              />
+              <Question question={questionList[currentQuestion]} currentQuestion={currentQuestion} handleAnswer={handleAnswer} ansList={answerList?.ansList} />
             )}
             <div className="d-flex align-content-center justify-content-between w-100 p-1">
-              <Button
-                color="primary"
-                disabled={currentQuestion == 0}
-                onClick={() => handlePageChange(currentQuestion - 1)}
-              >
-                <ArrowLeft
-                  size={14}
-                  className="rotate-rtl align-middle me-sm-50 me-0"
-                />
-                <div className="align-middle d-sm-inline-block d-none">
-                  Previous
-                </div>
+              <Button color="primary" disabled={currentQuestion == 0} onClick={() => handlePageChange(currentQuestion - 1)}>
+                <ArrowLeft size={14} className="rotate-rtl align-middle me-sm-50 me-0" />
+                <div className="align-middle d-sm-inline-block d-none">Previous</div>
               </Button>
               {currentQuestion != TotalQuestions - 1 ? (
-                <Button
-                  color="primary"
-                  disabled={currentQuestion == TotalQuestions - 1}
-                  onClick={() => handlePageChange(currentQuestion + 1)}
-                >
-                 
-                  <div className="align-middle d-sm-inline-block d-none">
-                    Next
-                  </div>
-                  <ArrowRight
-                    size={14}
-                    className="rotate-rtl align-middle ms-sm-50 ms-0"
-                  />
+                <Button color="primary" disabled={currentQuestion == TotalQuestions - 1} onClick={() => handlePageChange(currentQuestion + 1)}>
+                  <div className="align-middle d-sm-inline-block d-none">Next</div>
+                  <ArrowRight size={14} className="rotate-rtl align-middle ms-sm-50 ms-0" />
                 </Button>
               ) : (
-                <Button color="primary" onClick={() => handleSubmitQuiz()}>
+                <Button color="primary" onClick={() => handleSubmitQuiz()} disabled={quizLoading}>
                   {/* <ArrowRight
                     size={14}
                     className="rotate-rtl align-middle ms-sm-50 ms-0"
                   /> */}
-                  <div className="align-middle d-sm-inline-block d-none">
-                    Submit
-                  </div>
+                  <div className="align-middle d-sm-inline-block d-none">Submit</div>
                 </Button>
               )}
             </div>
@@ -209,21 +171,11 @@ const Quiz = ({ video, step, handleChangeStep, videoList }) => {
           <CardFooter className="flex-md-row flex-column align-md-items-center align-items-center border-bottom">
             <div className="d-flex justify-content-between">
               <div>
-                {Object.keys(answerList?.ansList).length} / {TotalQuestions}{" "}
-                Questions attempted
-                <Progress
-                  value={
-                    (Object.keys(answerList?.ansList).length * 100) /
-                    parseInt(TotalQuestions)
-                  }
-                />
+                {Object.keys(answerList?.ansList).length} / {TotalQuestions} Questions attempted
+                <Progress value={(Object.keys(answerList?.ansList).length * 100) / parseInt(TotalQuestions)} />
               </div>
               <div>
-                <QuizPagination
-                  currentQuestion={currentQuestion}
-                  TotalQuestions={TotalQuestions}
-                  handlePageChange={handlePageChange}
-                />
+                <QuizPagination currentQuestion={currentQuestion} TotalQuestions={TotalQuestions} handlePageChange={handlePageChange} />
               </div>
             </div>
           </CardFooter>

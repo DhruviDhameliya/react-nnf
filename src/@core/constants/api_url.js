@@ -1,5 +1,5 @@
 export const ApiRoutes = {
-  // API_HOSTNAME: "http://192.168.1.31:8005",
+  // API_HOSTNAME: "http://192.168.1.153:8005",
   API_HOSTNAME: "http://165.232.185.216:8005/",
   LOGIN: "login",
   CHECKEMAIL: "check-email",
@@ -36,4 +36,8 @@ export const ApiRoutes = {
   GETUSERSDATABYID: "get-userbyid",
   SENDOTP: "send-otp",
   UPDATENEWPASSWORD: "update-newpassword",
+  GETQUIZUSERLIST:'get-quizuserlist',
+  GETQUIZREPORTOFUSER:'get-quizreportbyuser',
+  GETOVERALLQUIZREPORT :'get-alluserreport',
+  GETEXCELUSERS:'get-excelusers'
 };
